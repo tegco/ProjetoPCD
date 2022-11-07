@@ -1,5 +1,8 @@
 package game;
 
+import environment.Cell;
+import environment.Coordinate;
+
 /**
  * Class to demonstrate a player being added to the game.
  * @author luismota
@@ -13,4 +16,5 @@ public class PhoneyHumanPlayer extends Player {
 	public boolean isHumanPlayer() {
 		return true;
 	}
+
 }

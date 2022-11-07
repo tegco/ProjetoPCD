@@ -1,6 +1,8 @@
 package game;
 
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Observable;
 import environment.Cell;
 import environment.Coordinate;
@@ -21,22 +23,25 @@ public class Game extends Observable {
 
 	public Game() {
 		board = new Cell[Game.DIMX][Game.DIMY];
-	
+
 		for (int x = 0; x < Game.DIMX; x++) 
 			for (int y = 0; y < Game.DIMY; y++) 
 				board[x][y] = new Cell(new Coordinate(x, y),this);
 	}
-	
+
 	/** 
 	 * @param player 
 	 */
-	public void addPlayerToGame(Player player) {
+	
+	private List<Player> playersList = new ArrayList<>();
+	
+	public void addPlayerToGame(Player player) throws InterruptedException {
 		Cell initialPos=getRandomCell();
 		initialPos.setPlayer(player);
-		
+
 		// To update GUI
 		notifyChange();
-		
+
 	}
 
 	public Cell getCell(Coordinate at) {
@@ -54,5 +59,56 @@ public class Game extends Observable {
 	public Cell getRandomCell() {
 		Cell newCell=getCell(new Coordinate((int)(Math.random()*Game.DIMX),(int)(Math.random()*Game.DIMY)));
 		return newCell; 
+	}
+
+	// Searchs game board and if a cell is occupied, compares the player in that cell with we player we are locking for. 
+	// If its a match, return its coordinate
+	// -> A FUNCIONAR
+	public Coordinate searchPlayerInBoard (Player player) {
+
+		for (int x = 0; x < this.DIMX; x++) {
+
+			for (int y = 0; y < this.DIMY; y++) {
+
+				Coordinate coord = new Coordinate (x, y); 
+				
+				if ((this.getCell(coord)).isOcupied() && this.getCell(coord).getPlayer().id == player.id) {
+					
+					System.out.println("Coordenada: " + "[" +  coord.x + "][" + coord.y + "]");
+					
+					return coord;
+				}
+
+			}
+
+		}
+
+		return null;
+	}
+
+	// EM CONSTRUÇÃO!!!
+	public void playersPlacementInBoard (Player [] players_List) throws InterruptedException {
+
+		for (Player p : players_List) {
+
+			Cell p_cell = getRandomCell();
+
+			if (p_cell.isOcupied()) {
+				
+				try {
+					p.wait(); // alterar
+
+					System.err.println("Position [" + p_cell.getPosition().x + "][" + p_cell.getPosition().y + "] is occupied by player #" + p_cell.getPlayer().id + "and player#" + p.id + "is waiting!");
+
+				} catch (InterruptedException e) {
+
+					e.printStackTrace();
+				}
+			}
+			else {
+				p_cell.setPlayer(p);
+
+			}
+		}
 	}
 }
