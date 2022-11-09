@@ -97,6 +97,9 @@ public class GameGuiMain implements Observer {
 			for(Player p : Game.playersList) {
 				
 				System.out.println("-> Jogador#" + p.getIdentification() + " " + "Energy=" + p.getCurrentStrength() + "\n");
+				
+				Thread.sleep(800);
+				
 				p.move(Direction.randomDirectionGenerator());
 				
 				System.out.println("-------------------------------------------");

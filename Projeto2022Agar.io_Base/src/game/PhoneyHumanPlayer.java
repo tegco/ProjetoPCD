@@ -17,7 +17,7 @@ public class PhoneyHumanPlayer extends Player {
 	public boolean isHumanPlayer() {
 		return true;
 	}
-	
+	 
 	@Override
 	public void move(Direction direction) {
 		

@@ -19,28 +19,45 @@ public class AutomaticPlayer extends Player {
 	@Override
 	public void move(Direction direction) {
 
+		// Get initial position of the player
 		Cell initialCell = this.getCurrentCell();
 		Coordinate initialPos = initialCell.getPosition();
 		
 		System.out.println("Posição atual: " + "[" + initialPos.x + "][" + initialPos.y + "]");
-
+		
+		// Generate player's new position
 		Coordinate newPos = (initialPos.translate(direction.getVector()));
+		
 		Cell newCell;
 		
+		// While we dont get a valid new position, we ask for a new direction that might lead to a valid position
 		while (!isValidPosition(newPos)) {
 			
 			direction = Direction.randomDirectionGenerator();
+			
+			System.out.println("FORA DO BOARD!" + "[" + initialPos.translate(direction.getVector()).x + "][" + initialPos.translate(direction.getVector()).y + "]");
+			
 			newPos = (initialPos.translate(direction.getVector()));
 			
-			System.out.println("FORA DO BOARD!" + "[" + newPos.x + "][" + newPos.y + "]");
-
 		}
+		
+		// When we get a valid new position, the player is set in the corresponding cell in the board
 		
 		Coordinate finalPos = (initialPos.translate(direction.getVector()));
 		
 		newCell = game.getCell(finalPos);
-
+		
+		System.out.println("New Cell:" + newCell.getPosition().toString());
+		
 		newCell.setPlayer(this);
+		Cell oldCell = game.getCell(initialPos);
+		oldCell.setPlayer(null);
+		
+		game.notifyChange();
+		
+		System.out.println("SetPlayer da finalPos: " + this.getCurrentCell().getPosition().toString());
+		
+		
 		
 		Coordinate currentPos = this.getCurrentCell().getPosition(); 
 		
