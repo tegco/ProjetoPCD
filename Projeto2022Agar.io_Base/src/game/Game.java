@@ -19,6 +19,8 @@ public class Game extends Observable {
 	public static final long MAX_WAITING_TIME_FOR_MOVE = 2000;
 	public static final long INITIAL_WAITING_TIME = 10000;
 
+	public static List<Player> playersList = new ArrayList<>();
+	
 	protected Cell[][] board;
 
 	public Game() {
@@ -33,7 +35,7 @@ public class Game extends Observable {
 	 * @param player 
 	 */
 	
-	private List<Player> playersList = new ArrayList<>();
+	
 	
 	public void addPlayerToGame(Player player) throws InterruptedException {
 		Cell initialPos=getRandomCell();
@@ -60,6 +62,10 @@ public class Game extends Observable {
 		Cell newCell=getCell(new Coordinate((int)(Math.random()*Game.DIMX),(int)(Math.random()*Game.DIMY)));
 		return newCell; 
 	}
+	
+	public boolean isWithinBounds(Coordinate coord) {
+		return coord.x >= 0 && coord.y >= 0 && coord.x < this.DIMX && coord.y < this.DIMY;
+	}
 
 	// Searchs game board and if a cell is occupied, compares the player in that cell with we player we are locking for. 
 	// If its a match, return its coordinate
@@ -74,7 +80,7 @@ public class Game extends Observable {
 				
 				if ((this.getCell(coord)).isOcupied() && this.getCell(coord).getPlayer().id == player.id) {
 					
-					System.out.println("Coordenada: " + "[" +  coord.x + "][" + coord.y + "]");
+					//System.out.println("Coordenada: " + "[" +  coord.x + "][" + coord.y + "]");
 					
 					return coord;
 				}

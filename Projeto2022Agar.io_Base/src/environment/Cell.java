@@ -17,33 +17,40 @@ public class Cell {
 	private Condition playerAtCell = lock.newCondition();
 	private Condition cellFree = lock.newCondition();
 
-	// Should not be used like this in the initial state: cell might be occupied, must coordinate this operation
-	// -> NÃO PARECE ESTAR A FUNCIONAR
-	public void setPlayer(Player player) throws InterruptedException {
-		
-		lock.lock();
-		
-		try {
-			
-			while (this.isOcupied()) {
-				cellFree.await();
-			}
-			
-			this.player = player;
-			playerAtCell.signalAll();
-			
-			
-		} finally {
-			lock.unlock();
-		}
-	}
-	
 
 	public Cell(Coordinate position, Game g) {
 		super();
 		this.position = position;
 		this.game=g;
 	}
+	
+	// Should not be used like this in the initial state: cell might be occupied, must coordinate this operation
+	
+	public void setPlayer(Player player) {
+        this.player = player;
+    }
+
+		// -> NÃO PARECE ESTAR A FUNCIONAR
+		/*public void setPlayer(Player player) throws InterruptedException {
+			
+			lock.lock();
+			
+			try {
+				
+				while (this.isOcupied()) {
+					cellFree.await();
+				}
+				
+				this.player = player;
+				playerAtCell.signalAll();
+				
+				
+			} finally {
+				lock.unlock();
+			}
+			
+			//game.notifyChange();
+		}*/
 
 	public Coordinate getPosition() {
 		return position;

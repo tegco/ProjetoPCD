@@ -2,6 +2,7 @@ package game;
 
 import environment.Cell;
 import environment.Coordinate;
+import environment.Direction;
 
 /**
  * Class to demonstrate a player being added to the game.
@@ -15,6 +16,11 @@ public class PhoneyHumanPlayer extends Player {
 
 	public boolean isHumanPlayer() {
 		return true;
+	}
+	
+	@Override
+	public void move(Direction direction) {
+		
 	}
 
 }

@@ -8,6 +8,7 @@ import java.util.Random;
 
 import environment.Cell;
 import environment.Coordinate;
+import environment.Direction;
 
 /**
  * Represents a player.
@@ -47,12 +48,31 @@ public abstract class Player extends Thread  {
 
 		int originalStrength = random.nextInt(3 - 1 + 1) + 1;
 
-		System.out.println("Random:" + originalStrength);
+		//System.out.println("Energy:" + originalStrength);
 
 		return originalStrength;
-
 	}
-
+	
+	
+	public boolean isValidPosition (Coordinate newCoord) {
+		
+		if (game.isWithinBounds(newCoord)) {
+			return true;
+		}
+		
+		return false;
+		
+	}
+	
+	/*@Override
+	public void run() {
+		
+		for (int i = 0; i != 10; i++) {
+			
+		}
+	}*/
+	
+	public abstract void move(Direction direction);
 	
 
 	public abstract boolean isHumanPlayer();
