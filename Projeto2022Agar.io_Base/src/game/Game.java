@@ -11,7 +11,8 @@ public class Game extends Observable {
 
 	public static final int DIMY = 30;
 	public static final int DIMX = 30;
-	private static final int NUM_PLAYERS = 90;
+	//private static final int NUM_PLAYERS = 90;
+	public static final int NUM_PLAYERS = 2;
 	private static final int NUM_FINISHED_PLAYERS_TO_END_GAME=3;
 
 	public static final long REFRESH_INTERVAL = 400;
@@ -19,8 +20,7 @@ public class Game extends Observable {
 	public static final long MAX_WAITING_TIME_FOR_MOVE = 2000;
 	public static final long INITIAL_WAITING_TIME = 10000;
 
-	public static List<Player> playersList = new ArrayList<>();
-	
+
 	protected Cell[][] board;
 
 	public Game() {
@@ -34,9 +34,10 @@ public class Game extends Observable {
 	/** 
 	 * @param player 
 	 */
-	
-	
-	
+
+
+
+
 	public void addPlayerToGame(Player player) throws InterruptedException {
 		Cell initialPos=getRandomCell();
 		initialPos.setPlayer(player);
@@ -62,7 +63,7 @@ public class Game extends Observable {
 		Cell newCell=getCell(new Coordinate((int)(Math.random()*Game.DIMX),(int)(Math.random()*Game.DIMY)));
 		return newCell; 
 	}
-	
+
 	public boolean isWithinBounds(Coordinate coord) {
 		return coord.x >= 0 && coord.y >= 0 && coord.x < this.DIMX && coord.y < this.DIMY;
 	}
@@ -77,11 +78,11 @@ public class Game extends Observable {
 			for (int y = 0; y < this.DIMY; y++) {
 
 				Coordinate coord = new Coordinate (x, y); 
-				
+
 				if ((this.getCell(coord)).isOcupied() && this.getCell(coord).getPlayer().id == player.id) {
-					
+
 					//System.out.println("Coordenada: " + "[" +  coord.x + "][" + coord.y + "]");
-					
+
 					return coord;
 				}
 
@@ -90,31 +91,5 @@ public class Game extends Observable {
 		}
 
 		return null;
-	}
-
-	// EM CONSTRUÇÃO!!!
-	public void playersPlacementInBoard (Player [] players_List) throws InterruptedException {
-
-		for (Player p : players_List) {
-
-			Cell p_cell = getRandomCell();
-
-			if (p_cell.isOcupied()) {
-				
-				try {
-					p.wait(); // alterar
-
-					System.err.println("Position [" + p_cell.getPosition().x + "][" + p_cell.getPosition().y + "] is occupied by player #" + p_cell.getPlayer().id + "and player#" + p.id + "is waiting!");
-
-				} catch (InterruptedException e) {
-
-					e.printStackTrace();
-				}
-			}
-			else {
-				p_cell.setPlayer(p);
-
-			}
-		}
 	}
 }

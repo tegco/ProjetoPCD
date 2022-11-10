@@ -34,6 +34,7 @@ public class GameGuiMain implements Observer {
 		frame.add(boardGui);
 
 		//VOLTAR A POR COMO ORIGINALMENTE ESTAVA
+
 		//frame.setSize(800,800);
 		frame.setSize(650, 650);
 		frame.setLocation(0, 0);
@@ -46,31 +47,35 @@ public class GameGuiMain implements Observer {
 		frame.setVisible(true);
 
 		// Demo players, should be deleted
-		try {
-			//Thread.sleep(3000);
-			Thread.sleep(800);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		//while(frame.isActive()) {
 
-		for (int i = 1; i < 3; i++) {
+		/*try {
+
+			//Thread.sleep(Game.INITIAL_WAITING_TIME);
+
+		} catch (InterruptedException e) {
+
+			e.printStackTrace();
+		}*/
+
+		System.out.println("Initial Placement:");
+		System.out.println("-------------------------------");
+
+		for (int i = 0; i < game.NUM_PLAYERS; i++) {
 
 			player = new AutomaticPlayer (i, game, (byte) Player.generateOriginalStrength());
-			game.playersList.add(player);
-
-			//Player player = new AutomaticPlayer (i, game, (byte) (i+1));
-
 			game.addPlayerToGame(player);
 
+			System.out.println("-> Jogador#" + player.getIdentification() + " "  + player.getCurrentCell().getPosition().toString() + " Energy=" + player.getCurrentStrength());
+			
+			player.start();
 		}
+		
+		System.out.println("--------------------------------");
 	}
 
 	//Testes
-	
-	
+
+
 	/*Player player = new PhoneyHumanPlayer (i, game, (byte) Player.generateOriginalStrength());
 	game.searchPlayerInBoard(player);
 	player.getCurrentCell().setPlayer(player);
@@ -90,29 +95,24 @@ public class GameGuiMain implements Observer {
 
 		GameGuiMain game = new GameGuiMain();
 		game.init();
-		
-		
-		for (int i = 1; i < 6; i++) {
-			
-			for(Player p : Game.playersList) {
-				
-				System.out.println("-> Jogador#" + p.getIdentification() + " " + "Energy=" + p.getCurrentStrength() + "\n");
-				
-				Thread.sleep(800);
-				
-				p.move(Direction.randomDirectionGenerator());
-				
-				System.out.println("-------------------------------------------");
+
+		while (true) {
+
+			for (int i = 0; i != game.game.NUM_PLAYERS; i++) {
+
+				/*System.out.println("------------------------------------");
+				System.out.println("-> Jogador#" + game.player.getIdentification() + " " + "Energy=" + game.player.getCurrentStrength() + "\n");
+
+				try {
+					
+					game.player.move(Direction.randomDirectionGenerator());
+
+					Thread.sleep(2000);
+					
+				} catch (Exception e) {
+				}
+				*/
 			}
-			
-			
-			
 		}
-		
-		
-
 	}
-
 }
-
-

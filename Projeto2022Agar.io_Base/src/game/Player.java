@@ -25,7 +25,6 @@ public abstract class Player extends Thread  {
 	private byte currentStrength;
 	protected byte originalStrength;
 
-	// TODO: get player position from data in game
 	// -> A FUNCIONAR
 	public Cell getCurrentCell() {
 		return this.game.getCell(game.searchPlayerInBoard(this));
@@ -40,6 +39,36 @@ public abstract class Player extends Thread  {
 		originalStrength=strength;
 	}
 
+	public void run() {
+		
+		System.out.println("--------------------------------");
+		System.out.println("\n");
+
+		while (true) {
+			
+			for (int i = 0; i != game.NUM_PLAYERS; i++) {
+				
+
+				try {
+					
+					System.out.println("-> Jogador#" + this.getIdentification() + " " + "Energy=" + this.getCurrentStrength());
+
+					this.move(Direction.randomDirectionGenerator());
+
+					Thread.sleep(2000);
+
+				}
+				catch (Exception e) {
+
+					System.out.println("Erro");
+					
+				} System.out.println("------------------------------------");
+				
+				
+			}
+		}
+	}
+
 	// Generate a player's initial strength randomly, from 1 to 3 (inclusive)
 	//  -> A FUNCIONAR
 	public static int generateOriginalStrength() {
@@ -52,28 +81,20 @@ public abstract class Player extends Thread  {
 
 		return originalStrength;
 	}
-	
-	
+
+
 	public boolean isValidPosition (Coordinate newCoord) {
-		
+
 		if (game.isWithinBounds(newCoord)) {
 			return true;
 		}
-		
+
 		return false;
-		
+
 	}
-	
-	/*@Override
-	public void run() {
-		
-		for (int i = 0; i != 10; i++) {
-			
-		}
-	}*/
-	
+
 	public abstract void move(Direction direction);
-	
+
 
 	public abstract boolean isHumanPlayer();
 

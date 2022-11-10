@@ -26,8 +26,8 @@ public class Cell {
 	
 	// Should not be used like this in the initial state: cell might be occupied, must coordinate this operation
 	
-	public void setPlayer(Player player) {
-        this.player = player;
+	public void setPlayer(Player newPlayer) {
+        this.player = newPlayer;
     }
 
 		// -> NÃO PARECE ESTAR A FUNCIONAR
@@ -41,8 +41,10 @@ public class Cell {
 					cellFree.await();
 				}
 				
-				this.player = player;
+				this.player = newPlayer;
 				playerAtCell.signalAll();
+				
+				System.err.println("Position [" + p_cell.getPosition().x + "][" + p_cell.getPosition().y + "] is occupied by player #" + p_cell.getPlayer().id + "and player#" + p.id + "is waiting!");
 				
 				
 			} finally {
