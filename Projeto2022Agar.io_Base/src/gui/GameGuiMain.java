@@ -46,7 +46,7 @@ public class GameGuiMain implements Observer {
 
 		frame.setVisible(true);
 
-		// Demo players, should be deleted
+		//VOLTAR A POR, É UM REQUISITO OBRIGATÓRIO
 
 		/*try {
 
@@ -57,23 +57,22 @@ public class GameGuiMain implements Observer {
 			e.printStackTrace();
 		}*/
 
-		System.out.println("Initial Placement:");
-		System.out.println("-------------------------------");
+		System.out.println("Initial Placement:\n");
 
 		for (int i = 0; i < game.NUM_PLAYERS; i++) {
 
 			player = new AutomaticPlayer (i, game, (byte) Player.generateOriginalStrength());
 			game.addPlayerToGame(player);
 
-			System.out.println("-> Jogador#" + player.getIdentification() + " "  + player.getCurrentCell().getPosition().toString() + " Energy=" + player.getCurrentStrength());
-			
+			System.out.println("Jogador#" + player.getIdentification() + " "  + player.getCurrentCell().getPosition().toString() + " Energy=" + player.getCurrentStrength());
+
 			player.start();
 		}
-		
-		System.out.println("--------------------------------");
+
+		System.out.println("-------------------------------");
 	}
 
-	//Testes
+	//Testes antigos de funções iniciais
 
 
 	/*Player player = new PhoneyHumanPlayer (i, game, (byte) Player.generateOriginalStrength());
@@ -83,8 +82,6 @@ public class GameGuiMain implements Observer {
 	player.start();
 	System.out.println("Cell:" + player.getCurrentCell().getPosition()); */
 
-	//}
-
 	@Override
 	public void update(Observable o, Object arg) {
 		boardGui.repaint();
@@ -92,27 +89,8 @@ public class GameGuiMain implements Observer {
 
 	public static void main(String[] args) throws InterruptedException {
 
-
 		GameGuiMain game = new GameGuiMain();
 		game.init();
 
-		while (true) {
-
-			for (int i = 0; i != game.game.NUM_PLAYERS; i++) {
-
-				/*System.out.println("------------------------------------");
-				System.out.println("-> Jogador#" + game.player.getIdentification() + " " + "Energy=" + game.player.getCurrentStrength() + "\n");
-
-				try {
-					
-					game.player.move(Direction.randomDirectionGenerator());
-
-					Thread.sleep(2000);
-					
-				} catch (Exception e) {
-				}
-				*/
-			}
-		}
 	}
 }

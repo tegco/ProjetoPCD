@@ -40,18 +40,14 @@ public abstract class Player extends Thread  {
 	}
 
 	public void run() {
-		
-		System.out.println("--------------------------------");
-		System.out.println("\n");
 
 		while (true) {
-			
+
 			for (int i = 0; i != game.NUM_PLAYERS; i++) {
-				
+
+				System.out.println("-> Jogador#" + this.getIdentification() + " " + "Energy=" + this.getCurrentStrength());
 
 				try {
-					
-					System.out.println("-> Jogador#" + this.getIdentification() + " " + "Energy=" + this.getCurrentStrength());
 
 					this.move(Direction.randomDirectionGenerator());
 
@@ -61,10 +57,8 @@ public abstract class Player extends Thread  {
 				catch (Exception e) {
 
 					System.out.println("Erro");
-					
+
 				} System.out.println("------------------------------------");
-				
-				
 			}
 		}
 	}
