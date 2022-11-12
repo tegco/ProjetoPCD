@@ -64,7 +64,7 @@ public abstract class Player extends Thread  {
 
 	}
 
-	public abstract void move(Direction direction);
+	public abstract void move(Direction direction) throws InterruptedException;
 
 
 	public abstract boolean isHumanPlayer();

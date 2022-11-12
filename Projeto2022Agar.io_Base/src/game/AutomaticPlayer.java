@@ -72,6 +72,7 @@ public class AutomaticPlayer extends Player {
 		try {
 			
 			newCell.setPlayer(this);
+			
 			initialCell.setPlayer(null);
 			
 

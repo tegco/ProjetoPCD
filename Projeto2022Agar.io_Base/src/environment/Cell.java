@@ -36,6 +36,11 @@ public class Cell {
 		lock.lock();
 
 		try {
+			
+			if (newPlayer == null) {
+				this.player = null;
+				cellFree.signalAll();
+			}
 
 			while (this.isOcupied()) {
 
@@ -51,8 +56,6 @@ public class Cell {
 		} finally {
 			lock.unlock();
 		}
-
-		//game.notifyChange();
 	}
 
 	public Coordinate getPosition() {
