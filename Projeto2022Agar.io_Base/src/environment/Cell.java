@@ -26,33 +26,34 @@ public class Cell {
 
 	// Should not be used like this in the initial state: cell might be occupied, must coordinate this operation
 
-	public void setPlayer(Player newPlayer) {
+	/*public void setPlayer(Player newPlayer) {
 		this.player = newPlayer;
-	}
+	}*/
 
 	// -> NÃO PARECE ESTAR A FUNCIONAR
-	/*public void setPlayer(Player player) throws InterruptedException {
+	public void setPlayer(Player newPlayer) throws InterruptedException {
 
-			lock.lock();
+		lock.lock();
 
-			try {
+		try {
 
-				while (this.isOcupied()) {
-					cellFree.await();
-				}
+			while (this.isOcupied()) {
 
-				this.player = newPlayer;
-				playerAtCell.signalAll();
+				System.err.println("Position " + this.player.getCurrentCell().getPosition() + "] is occupied by player #" + player.getIdentification() + " and player#" + newPlayer.getIdentification() + " is waiting!");
 
-				System.err.println("Position [" + p_cell.getPosition().x + "][" + p_cell.getPosition().y + "] is occupied by player #" + p_cell.getPlayer().id + "and player#" + p.id + "is waiting!");
+				cellFree.await();
 
-
-			} finally {
-				lock.unlock();
 			}
+			
+			this.player = newPlayer;
+			playerAtCell.signalAll();
 
-			//game.notifyChange();
-		}*/
+		} finally {
+			lock.unlock();
+		}
+
+		//game.notifyChange();
+	}
 
 	public Coordinate getPosition() {
 		return position;

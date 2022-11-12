@@ -11,6 +11,8 @@ import game.Player;
 
 import javax.swing.JFrame;
 
+import environment.Cell;
+import environment.Coordinate;
 import environment.Direction;
 
 public class GameGuiMain implements Observer {
@@ -62,6 +64,12 @@ public class GameGuiMain implements Observer {
 		for (int i = 0; i < game.NUM_PLAYERS; i++) {
 
 			player = new AutomaticPlayer (i, game, (byte) Player.generateOriginalStrength());
+			
+			//Coordinate pos = new Coordinate (2,2);
+			
+			//Cell cell = game.getCell(pos);
+			
+			//cell.setPlayer(player);
 			game.addPlayerToGame(player);
 
 			System.out.println("Jogador#" + player.getIdentification() + " "  + player.getCurrentCell().getPosition().toString() + " Energy=" + player.getCurrentStrength());

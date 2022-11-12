@@ -17,6 +17,31 @@ public class AutomaticPlayer extends Player {
 	}
 
 	@Override
+	public void run() {
+
+		while (true) {
+
+			for (int i = 0; i != game.NUM_PLAYERS; i++) {
+
+				System.out.println("-> Jogador#" + this.getIdentification() + " " + "Energy=" + this.getCurrentStrength());
+
+				try {
+
+					this.move(Direction.randomDirectionGenerator());
+
+					Thread.sleep(2000);
+
+				}
+				catch (Exception e) {
+
+					System.out.println("Erro");
+
+				} System.out.println("------------------------------------");
+			}
+		}
+	}
+
+	@Override
 	public void move(Direction direction) {
 
 		// Get initial position of the player
@@ -44,8 +69,16 @@ public class AutomaticPlayer extends Player {
 
 		//System.out.println("New Cell:" + newCell.getPosition().toString());
 
-		newCell.setPlayer(this);
-		initialCell.setPlayer(null);
+		try {
+			
+			newCell.setPlayer(this);
+			initialCell.setPlayer(null);
+			
+
+		} catch (Exception e) {
+
+		}
+
 		game.notifyChange();
 
 		//System.out.println("SetPlayer da finalPos: " + this.getCurrentCell().getPosition().toString());

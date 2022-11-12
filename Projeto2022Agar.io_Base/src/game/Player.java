@@ -39,29 +39,6 @@ public abstract class Player extends Thread  {
 		originalStrength=strength;
 	}
 
-	public void run() {
-
-		while (true) {
-
-			for (int i = 0; i != game.NUM_PLAYERS; i++) {
-
-				System.out.println("-> Jogador#" + this.getIdentification() + " " + "Energy=" + this.getCurrentStrength());
-
-				try {
-
-					this.move(Direction.randomDirectionGenerator());
-
-					Thread.sleep(2000);
-
-				}
-				catch (Exception e) {
-
-					System.out.println("Erro");
-
-				} System.out.println("------------------------------------");
-			}
-		}
-	}
 
 	// Generate a player's initial strength randomly, from 1 to 3 (inclusive)
 	//  -> A FUNCIONAR
