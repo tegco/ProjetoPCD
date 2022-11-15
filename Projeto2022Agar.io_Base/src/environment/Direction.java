@@ -14,14 +14,12 @@ public enum Direction {
 	
 	
 	//Generates a random direction
-	// -> A FUNCIONAR
 	public static Direction randomDirectionGenerator () {
 		
 		Direction [] values = Direction.values();
 		
 		int index = new Random().nextInt(values.length);
-
-		System.out.println("Direção: " + values[index]);
+		//System.out.println("Direção: " + values[index]);
 		
 		return values[index];
 		

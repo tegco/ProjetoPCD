@@ -14,7 +14,6 @@ public class Cell {
 	private Player player=null;
 
 	private Lock lock = new ReentrantLock();
-	private Condition playerAtCell = lock.newCondition();
 	private Condition cellFree = lock.newCondition();
 
 
@@ -24,19 +23,12 @@ public class Cell {
 		this.game=g;
 	}
 
-	// Should not be used like this in the initial state: cell might be occupied, must coordinate this operation
-
-	/*public void setPlayer(Player newPlayer) {
-		this.player = newPlayer;
-	}*/
-
-	// -> NÃO PARECE ESTAR A FUNCIONAR
 	public void setPlayer(Player newPlayer) throws InterruptedException {
 
 		lock.lock();
 
 		try {
-			
+
 			if (newPlayer == null) {
 				this.player = null;
 				cellFree.signalAll();
@@ -44,19 +36,18 @@ public class Cell {
 
 			while (this.isOcupied()) {
 
-				System.err.println("Position " + this.player.getCurrentCell().getPosition() + "] is occupied by player #" + player.getIdentification() + " and player#" + newPlayer.getIdentification() + " is waiting!");
+				System.err.println("\nPosition " + this.player.getCurrentCell().getPosition().toString() + " is occupied by Player#" + player.getIdentification() + " and Player#" + newPlayer.getIdentification() + " is waiting!\n");
 
 				cellFree.await();
-
 			}
-			
+
 			this.player = newPlayer;
-			playerAtCell.signalAll();
 
 		} finally {
 			lock.unlock();
 		}
 	}
+
 
 	public Coordinate getPosition() {
 		return position;

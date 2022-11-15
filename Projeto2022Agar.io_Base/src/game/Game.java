@@ -1,6 +1,4 @@
 package game;
-
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
@@ -35,9 +33,6 @@ public class Game extends Observable {
 	 * @param player 
 	 */
 
-
-
-
 	public void addPlayerToGame(Player player) throws InterruptedException {
 		Cell initialPos=getRandomCell();
 		initialPos.setPlayer(player);
@@ -70,7 +65,6 @@ public class Game extends Observable {
 
 	// Searchs game board and if a cell is occupied, compares the player in that cell with we player we are locking for. 
 	// If its a match, return its coordinate
-	// -> A FUNCIONAR
 	public Coordinate searchPlayerInBoard (Player player) {
 
 		for (int x = 0; x < this.DIMX; x++) {
@@ -80,16 +74,10 @@ public class Game extends Observable {
 				Coordinate coord = new Coordinate (x, y); 
 
 				if ((this.getCell(coord)).isOcupied() && this.getCell(coord).getPlayer().id == player.id) {
-
-					//System.out.println("Coordenada: " + "[" +  coord.x + "][" + coord.y + "]");
-
 					return coord;
 				}
-
 			}
-
 		}
-
 		return null;
 	}
 }

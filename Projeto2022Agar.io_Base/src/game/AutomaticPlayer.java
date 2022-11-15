@@ -19,24 +19,37 @@ public class AutomaticPlayer extends Player {
 	@Override
 	public void run() {
 
+		try {
+
+			game.addPlayerToGame(this);
+			
+			System.out.println("Player#" + this.getIdentification() + " "  + this.getCurrentCell().getPosition().toString() + " Energy = " + this.getCurrentStrength());
+			
+			Thread.sleep(Game.INITIAL_WAITING_TIME);
+			
+			
+		} catch (InterruptedException e) {
+
+			e.printStackTrace();
+		} 
+		
 		while (true) {
 
 			for (int i = 0; i != game.NUM_PLAYERS; i++) {
-
-				System.out.println("-> Jogador#" + this.getIdentification() + " " + "Energy=" + this.getCurrentStrength());
-
+				
 				try {
+					
+					System.out.println("-> Player#" + this.getIdentification() + " " + "Energy = " + this.getCurrentStrength());
 
 					this.move(Direction.randomDirectionGenerator());
-
-					Thread.sleep(2000);
-
+					
+					System.out.println("------------------------------");
+					
+					Thread.sleep(game.REFRESH_INTERVAL);
 				}
 				catch (Exception e) {
 
-					System.out.println("Erro");
-
-				} System.out.println("------------------------------------");
+				} 
 			}
 		}
 	}
@@ -48,42 +61,34 @@ public class AutomaticPlayer extends Player {
 		Cell initialCell = this.getCurrentCell();
 		Coordinate initialPos = initialCell.getPosition();
 
-		System.out.println("Posição atual: " + initialPos.toString());
+		System.out.println("Current Position: " + initialPos.toString() + "\n" + "Direction: " + direction.toString());
 
 		// Generate player's new position
 		Coordinate newPos = (initialPos.translate(direction.getVector()));
 		Cell newCell;
 
-		// While we dont get a valid new position, we ask for a new direction that might lead to a valid position
+		// While we don't get a valid new position, we ask for a new direction that might lead to a valid position
 		while (!isValidPosition(newPos)) {
 
 			direction = Direction.randomDirectionGenerator();
-			System.out.println("**FORA DO BOARD!**" + initialPos.translate(direction.getVector()).toString());
+			System.out.println("****FORA DO BOARD!**** -> " + initialPos.translate(direction.getVector()).toString());
 			newPos = (initialPos.translate(direction.getVector()));
 		}
 
 		// When we get a valid new position, the player is set in the corresponding cell in the board
-
 		Coordinate finalPos = (initialPos.translate(direction.getVector()));
 		newCell = game.getCell(finalPos);
 
-		//System.out.println("New Cell:" + newCell.getPosition().toString());
-
 		try {
-			
+
+			initialCell.setPlayer(null);
 			newCell.setPlayer(this);
 			
-			initialCell.setPlayer(null);
-			
-
-		} catch (Exception e) {
-
-		}
-
+		} catch (Exception e) {}
+		
 		game.notifyChange();
 
-		//System.out.println("SetPlayer da finalPos: " + this.getCurrentCell().getPosition().toString());
-		System.out.println("Posição nova: " + finalPos.toString());
+		System.out.println("New Position: " + finalPos.toString());
 
 	}
 }

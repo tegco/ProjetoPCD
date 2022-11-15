@@ -1,7 +1,4 @@
 package game;
-
-
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -17,7 +14,6 @@ import environment.Direction;
  */
 public abstract class Player extends Thread  {
 
-
 	protected  Game game;
 
 	int id;
@@ -25,7 +21,6 @@ public abstract class Player extends Thread  {
 	private byte currentStrength;
 	protected byte originalStrength;
 
-	// -> A FUNCIONAR
 	public Cell getCurrentCell() {
 		return this.game.getCell(game.searchPlayerInBoard(this));
 	}
@@ -41,18 +36,14 @@ public abstract class Player extends Thread  {
 
 
 	// Generate a player's initial strength randomly, from 1 to 3 (inclusive)
-	//  -> A FUNCIONAR
 	public static int generateOriginalStrength() {
 
 		Random random = new Random();
 
 		int originalStrength = random.nextInt(3 - 1 + 1) + 1;
-
 		//System.out.println("Energy:" + originalStrength);
-
 		return originalStrength;
 	}
-
 
 	public boolean isValidPosition (Coordinate newCoord) {
 
@@ -61,11 +52,9 @@ public abstract class Player extends Thread  {
 		}
 
 		return false;
-
 	}
 
 	public abstract void move(Direction direction) throws InterruptedException;
-
 
 	public abstract boolean isHumanPlayer();
 

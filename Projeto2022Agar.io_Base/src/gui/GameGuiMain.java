@@ -28,7 +28,6 @@ public class GameGuiMain implements Observer {
 		game.addObserver(this);
 
 		buildGui();
-
 	}
 
 	private void buildGui() {
@@ -36,7 +35,6 @@ public class GameGuiMain implements Observer {
 		frame.add(boardGui);
 
 		//VOLTAR A POR COMO ORIGINALMENTE ESTAVA
-
 		//frame.setSize(800,800);
 		frame.setSize(650, 650);
 		frame.setLocation(0, 0);
@@ -46,38 +44,15 @@ public class GameGuiMain implements Observer {
 
 	public void init() throws InterruptedException  {
 
+		System.out.println("INITIAL PLACEMENT: \n" + "------------------");
+		
 		frame.setVisible(true);
-
-		//VOLTAR A POR, É UM REQUISITO OBRIGATÓRIO
-
-		/*try {
-
-			//Thread.sleep(Game.INITIAL_WAITING_TIME);
-
-		} catch (InterruptedException e) {
-
-			e.printStackTrace();
-		}*/
-
-		System.out.println("Initial Placement:\n");
-
+		
 		for (int i = 0; i < game.NUM_PLAYERS; i++) {
-
+			
 			player = new AutomaticPlayer (i, game, (byte) Player.generateOriginalStrength());
-			
-			//Coordinate pos = new Coordinate (2,2);
-			
-			//Cell cell = game.getCell(pos);
-			
-			//cell.setPlayer(player);
-			game.addPlayerToGame(player);
-
-			System.out.println("Jogador#" + player.getIdentification() + " "  + player.getCurrentCell().getPosition().toString() + " Energy=" + player.getCurrentStrength());
-
 			player.start();
 		}
-
-		System.out.println("-------------------------------");
 	}
 
 	//Testes antigos de funções iniciais
