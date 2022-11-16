@@ -76,11 +76,16 @@ public abstract class Player extends Thread  {
 		Player winner = confrontationWinner(p1, p2);
 
 		int s = p1.currentStrength += p2.currentStrength;
+		
+		if (s > 10) {
+			s = 10;
+		}
 
 		if (p1 == winner) {
 
 			p1.currentStrength = (byte) s;
 			p2.currentStrength = 0;
+		
 		}
 
 		else {

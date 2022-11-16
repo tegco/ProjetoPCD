@@ -33,26 +33,88 @@ public class AutomaticPlayer extends Player {
 			e.printStackTrace();
 		} 
 
+		int count = 1;
+
 		while (true) {
 
 			for (int i = 0; i != game.NUM_PLAYERS; i++) {
-
+				
 				try {
-
-					System.out.println("-> Player#" + this.getIdentification() + " " + "Energy = " + this.getCurrentStrength());
-
-					this.move(Direction.randomDirectionGenerator());
-
-					System.out.println("------------------------------");
-
+					
 					Thread.sleep(game.REFRESH_INTERVAL);
+					
+				} catch (Exception e) {
+					
 				}
-				catch (Exception e) {
 
-				} 
+				if (this.originalStrength == 2 && count% this.originalStrength == 0) {
+
+					System.out.println("Sou o 2");
+
+					try {
+
+						System.out.println("-> Player#" + this.getIdentification() + " " + "Energy = " + this.getCurrentStrength());
+
+						this.move(Direction.randomDirectionGenerator());
+
+						System.out.println("------------------------------");
+
+						//Thread.sleep(game.REFRESH_INTERVAL);
+					}
+					catch (Exception e) {
+
+					} 
+				}
+
+				if (this.originalStrength == 3 && count% this.originalStrength == 0) {
+
+					System.out.println("Sou o 3");
+
+					try {
+
+						System.out.println("-> Player#" + this.getIdentification() + " " + "Energy = " + this.getCurrentStrength());
+
+						this.move(Direction.randomDirectionGenerator());
+
+						System.out.println("------------------------------");
+
+						//Thread.sleep(game.REFRESH_INTERVAL);
+					}
+					catch (Exception e) {
+
+					}
+				}
+
+				if (this.originalStrength == 1) {
+
+					System.out.println("Sou o 1 ");
+
+					try {
+
+						System.out.println("-> Player#" + this.getIdentification() + " " + "Energy = " + this.getCurrentStrength());
+
+						this.move(Direction.randomDirectionGenerator());
+
+						System.out.println("------------------------------");
+
+						
+					}
+					catch (Exception e) {
+
+					} 
+
+				}
+
+
+				count++;
+
+				System.out.println("Count: " + count);
+
 			}
 		}
 	}
+
+
 
 	@Override
 	public void move(Direction direction) {

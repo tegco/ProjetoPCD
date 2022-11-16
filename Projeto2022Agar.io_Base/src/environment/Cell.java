@@ -50,16 +50,22 @@ public class Cell {
 	}
 	
 
-	public void confrontationOutcome(Player newPlayer) {
+	public void confrontationOutcome(Player newPlayer) throws InterruptedException {
 		
-		byte currentPlayerStrenght = this.player.getCurrentStrength();
+		byte currentPlayerStrength = this.player.getCurrentStrength();
 		
 		//Se for um player ativo
-		if (currentPlayerStrenght > 0 && currentPlayerStrenght < 10 ) {
+		if (currentPlayerStrength > 0 && currentPlayerStrength < 10) {
 			
 			Player winner = Player.confrontationWinner(this.player, newPlayer);
 			winner.setAfterConfrontationStrength(this.player, newPlayer);
 	
+		}
+		
+		if (currentPlayerStrength == 10 || currentPlayerStrength == 0 ) {
+			//bloqueado
+			//this.player.
+			
 		}
 		
 	}
