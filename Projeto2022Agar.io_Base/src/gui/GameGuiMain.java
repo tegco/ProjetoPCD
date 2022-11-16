@@ -48,22 +48,41 @@ public class GameGuiMain implements Observer {
 		
 		frame.setVisible(true);
 		
-		for (int i = 0; i < game.NUM_PLAYERS; i++) {
-			
-			player = new AutomaticPlayer (i, game, (byte) Player.generateOriginalStrength());
-			player.start();
-		}
-	}
+//		for (int i = 0; i < game.NUM_PLAYERS; i++) {
+//			
+//			player = new AutomaticPlayer (i, game, (byte) Player.generateOriginalStrength());
+//			player.start();
+//		}
+	
 
-	//Testes antigos de funções iniciais
+	//Testes de funções auxiliares
+		
+		//winnerPlayer &&  setAfterConfrontationStrength
 
-
-	/*Player player = new PhoneyHumanPlayer (i, game, (byte) Player.generateOriginalStrength());
-	game.searchPlayerInBoard(player);
-	player.getCurrentCell().setPlayer(player);
+	Player p1 = new PhoneyHumanPlayer (1, game, (byte) Player.generateOriginalStrength());
+	Player p2 = new PhoneyHumanPlayer (2, game, (byte) Player.generateOriginalStrength());
+	System.out.println("Player#" + p1.getIdentification() + " " + "Energy " + p1.getCurrentStrength());
+	System.out.println("Player#" + p2.getIdentification() + " " + "Energy " + p2.getCurrentStrength());
+	System.out.println("Winner: Player#"+ Player.confrontationWinner(p1, p2).getIdentification());
+	
+	
+	Player.setAfterConfrontationStrength(p1, p2);
+	
+	System.out.println("Player#" + p1.getIdentification() + " " + "Energy " + p1.getCurrentStrength());
+	System.out.println("Player#" + p2.getIdentification() + " " + "Energy " + p2.getCurrentStrength());
+	
+	//---------------------------------------------------------------------------------------------------//
+	
+	//game.searchPlayerInBoard(player);
+	//player.getCurrentCell().setPlayer(player);
+	
+	
 	game.notifyChange();
-	player.start();
-	System.out.println("Cell:" + player.getCurrentCell().getPosition()); */
+	
+	//System.out.println("Cell:" + player.getCurrentCell().getPosition()); 
+	
+	}
+	
 
 	@Override
 	public void update(Observable o, Object arg) {

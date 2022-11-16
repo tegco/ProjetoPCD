@@ -22,29 +22,29 @@ public class AutomaticPlayer extends Player {
 		try {
 
 			game.addPlayerToGame(this);
-			
+
 			System.out.println("Player#" + this.getIdentification() + " "  + this.getCurrentCell().getPosition().toString() + " Energy = " + this.getCurrentStrength());
-			
+
 			Thread.sleep(Game.INITIAL_WAITING_TIME);
-			
-			
+
+
 		} catch (InterruptedException e) {
 
 			e.printStackTrace();
 		} 
-		
+
 		while (true) {
 
 			for (int i = 0; i != game.NUM_PLAYERS; i++) {
-				
+
 				try {
-					
+
 					System.out.println("-> Player#" + this.getIdentification() + " " + "Energy = " + this.getCurrentStrength());
 
 					this.move(Direction.randomDirectionGenerator());
-					
+
 					System.out.println("------------------------------");
-					
+
 					Thread.sleep(game.REFRESH_INTERVAL);
 				}
 				catch (Exception e) {
@@ -83,9 +83,9 @@ public class AutomaticPlayer extends Player {
 
 			initialCell.setPlayer(null);
 			newCell.setPlayer(this);
-			
+
 		} catch (Exception e) {}
-		
+
 		game.notifyChange();
 
 		System.out.println("New Position: " + finalPos.toString());

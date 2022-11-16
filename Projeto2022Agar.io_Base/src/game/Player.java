@@ -45,6 +45,51 @@ public abstract class Player extends Thread  {
 		return originalStrength;
 	}
 
+	// -> FUNCIONA
+	public static Player confrontationWinner(Player p1, Player p2) {
+
+		if (p1.currentStrength > p2.currentStrength) {
+			return p1;
+
+		}
+
+		if (p1.currentStrength == p2.currentStrength) {
+
+			Random random = new Random();
+			int randomPlayer = random.nextInt(2);
+
+			if (randomPlayer == 0) {
+				return p1;
+
+			}
+
+			return p2;
+
+		}
+
+		return p2;
+	}
+
+	// -> FUNCIONA
+	public static void setAfterConfrontationStrength (Player p1, Player p2) {
+
+		Player winner = confrontationWinner(p1, p2);
+
+		int s = p1.currentStrength += p2.currentStrength;
+
+		if (p1 == winner) {
+
+			p1.currentStrength = (byte) s;
+			p2.currentStrength = 0;
+		}
+
+		else {
+			p2.currentStrength = (byte) s;
+			p1.currentStrength = 0;
+		}
+
+	}
+
 	public boolean isValidPosition (Coordinate newCoord) {
 
 		if (game.isWithinBounds(newCoord)) {
@@ -57,6 +102,12 @@ public abstract class Player extends Thread  {
 	public abstract void move(Direction direction) throws InterruptedException;
 
 	public abstract boolean isHumanPlayer();
+
+	public boolean isInactive () {
+		return (this.currentStrength == 10 || this.currentStrength == 0);
+
+	}
+
 
 	@Override
 	public String toString() {

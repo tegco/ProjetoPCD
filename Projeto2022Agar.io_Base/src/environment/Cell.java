@@ -37,15 +37,31 @@ public class Cell {
 			while (this.isOcupied()) {
 
 				System.err.println("\nPosition " + this.player.getCurrentCell().getPosition().toString() + " is occupied by Player#" + player.getIdentification() + " and Player#" + newPlayer.getIdentification() + " is waiting!\n");
-
+				
 				cellFree.await();
 			}
 
 			this.player = newPlayer;
 
 		} finally {
+			
 			lock.unlock();
 		}
+	}
+	
+
+	public void confrontationOutcome(Player newPlayer) {
+		
+		byte currentPlayerStrenght = this.player.getCurrentStrength();
+		
+		//Se for um player ativo
+		if (currentPlayerStrenght > 0 && currentPlayerStrenght < 10 ) {
+			
+			Player winner = Player.confrontationWinner(this.player, newPlayer);
+			winner.setAfterConfrontationStrength(this.player, newPlayer);
+	
+		}
+		
 	}
 
 
