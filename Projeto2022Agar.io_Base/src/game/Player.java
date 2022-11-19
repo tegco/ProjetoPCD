@@ -44,6 +44,27 @@ public abstract class Player extends Thread  {
 		//System.out.println("Energy:" + originalStrength);
 		return originalStrength;
 	}
+	
+
+	public void movementOutcome(Player otherPlayer) throws InterruptedException {
+		
+		//byte currentPlayerStrength = this.player.getCurrentStrength();
+		byte otherPlayerStrength = otherPlayer.getCurrentStrength();
+		
+		//Se for um player ativo
+		if (otherPlayer.isActive()) {
+					setAfterConfrontationStrength(this, otherPlayer);
+		}
+		//Se for um jogador morto
+		if (otherPlayer.isDead()) {
+			//bloqueado
+			this.wait();
+		}
+		
+		if (this.hasMaxStrenght()) {
+			this.stop();
+		}	
+	}
 
 	// -> FUNCIONA
 	public static Player confrontationWinner(Player p1, Player p2) {
@@ -60,13 +81,10 @@ public abstract class Player extends Thread  {
 
 			if (randomPlayer == 0) {
 				return p1;
-
 			}
-
 			return p2;
 
 		}
-
 		return p2;
 	}
 
@@ -85,7 +103,6 @@ public abstract class Player extends Thread  {
 
 			p1.currentStrength = (byte) s;
 			p2.currentStrength = 0;
-		
 		}
 
 		else {
@@ -107,12 +124,19 @@ public abstract class Player extends Thread  {
 	public abstract void move(Direction direction) throws InterruptedException;
 
 	public abstract boolean isHumanPlayer();
-
-	public boolean isInactive () {
-		return (this.currentStrength == 10 || this.currentStrength == 0);
-
+	
+	public boolean hasMaxStrenght () {
+		return this.currentStrength == Game.MAX_POSSIBLE_STRENGTH;
 	}
 
+	public boolean isActive () {
+		return (this.currentStrength > 0 && this.currentStrength < 10);
+
+	}
+	
+	public boolean isDead() {
+		return this.currentStrength == 0;
+	}
 
 	@Override
 	public String toString() {
@@ -145,7 +169,6 @@ public abstract class Player extends Thread  {
 	public byte getCurrentStrength() {
 		return currentStrength;
 	}
-
 
 	public int getIdentification() {
 		return id;

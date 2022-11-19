@@ -24,7 +24,6 @@ public class AutomaticPlayer extends Player {
 			game.addPlayerToGame(this);
 
 			System.out.println("Player#" + this.getIdentification() + " "  + this.getCurrentCell().getPosition().toString() + " Energy = " + this.getCurrentStrength());
-
 			Thread.sleep(Game.INITIAL_WAITING_TIME);
 
 
@@ -33,124 +32,73 @@ public class AutomaticPlayer extends Player {
 			e.printStackTrace();
 		} 
 
-		int count = 1;
+
+		long refresh_interval = Game.REFRESH_INTERVAL;
+
+		switch (this.originalStrength) {
+
+		case 2: refresh_interval = Game.REFRESH_INTERVAL * 2;
+		break;
+		case 3: refresh_interval = Game.REFRESH_INTERVAL * 3;
+		break;
+		}
 
 		while (true) {
 
-			for (int i = 0; i != game.NUM_PLAYERS; i++) {
-				
+			for (int i = 0; i != Game.NUM_PLAYERS; i++) {				
+
 				try {
+
+					System.out.println("-> Player#" + this.getIdentification() + " " + "Energy = " + this.getCurrentStrength());
 					
-					Thread.sleep(game.REFRESH_INTERVAL);
-					
-				} catch (Exception e) {
-					
+					this.move(Direction.randomDirectionGenerator());
+					Thread.sleep(refresh_interval);
+
+					System.out.println("------------------------------");
 				}
-
-				if (this.originalStrength == 2 && count% this.originalStrength == 0) {
-
-					System.out.println("Sou o 2");
-
-					try {
-
-						System.out.println("-> Player#" + this.getIdentification() + " " + "Energy = " + this.getCurrentStrength());
-
-						this.move(Direction.randomDirectionGenerator());
-
-						System.out.println("------------------------------");
-
-						//Thread.sleep(game.REFRESH_INTERVAL);
-					}
-					catch (Exception e) {
-
-					} 
-				}
-
-				if (this.originalStrength == 3 && count% this.originalStrength == 0) {
-
-					System.out.println("Sou o 3");
-
-					try {
-
-						System.out.println("-> Player#" + this.getIdentification() + " " + "Energy = " + this.getCurrentStrength());
-
-						this.move(Direction.randomDirectionGenerator());
-
-						System.out.println("------------------------------");
-
-						//Thread.sleep(game.REFRESH_INTERVAL);
-					}
-					catch (Exception e) {
-
-					}
-				}
-
-				if (this.originalStrength == 1) {
-
-					System.out.println("Sou o 1 ");
-
-					try {
-
-						System.out.println("-> Player#" + this.getIdentification() + " " + "Energy = " + this.getCurrentStrength());
-
-						this.move(Direction.randomDirectionGenerator());
-
-						System.out.println("------------------------------");
-
-						
-					}
-					catch (Exception e) {
-
-					} 
-
-				}
-
-
-				count++;
-
-				System.out.println("Count: " + count);
-
+				catch (Exception e) {}
 			}
 		}
 	}
 
 
+		@Override
+		public void move(Direction direction) throws InterruptedException {
 
-	@Override
-	public void move(Direction direction) {
+			// Get initial position of the player
+			Cell initialCell = this.getCurrentCell();
+			Coordinate initialPos = initialCell.getPosition();
 
-		// Get initial position of the player
-		Cell initialCell = this.getCurrentCell();
-		Coordinate initialPos = initialCell.getPosition();
+			System.out.println("Current Position: " + initialPos.toString() + "\n" + "Direction: " + direction.toString());
 
-		System.out.println("Current Position: " + initialPos.toString() + "\n" + "Direction: " + direction.toString());
+			// Generate player's new position
+			Coordinate newPos = (initialPos.translate(direction.getVector()));
+			Cell newCell;
 
-		// Generate player's new position
-		Coordinate newPos = (initialPos.translate(direction.getVector()));
-		Cell newCell;
+			// While we don't get a valid new position, we ask for a new direction that might lead to a valid position
+			while (!isValidPosition(newPos)) {
 
-		// While we don't get a valid new position, we ask for a new direction that might lead to a valid position
-		while (!isValidPosition(newPos)) {
+				direction = Direction.randomDirectionGenerator();
+				System.out.println("****FORA DO BOARD!**** -> " + initialPos.translate(direction.getVector()).toString());
+				newPos = (initialPos.translate(direction.getVector()));
+			}
 
-			direction = Direction.randomDirectionGenerator();
-			System.out.println("****FORA DO BOARD!**** -> " + initialPos.translate(direction.getVector()).toString());
-			newPos = (initialPos.translate(direction.getVector()));
+			// When we get a valid new position, the player is set in the corresponding cell in the board
+			Coordinate finalPos = (initialPos.translate(direction.getVector()));
+			newCell = game.getCell(finalPos);
+			
+			//this.movementOutcome(newCell.getPlayer());
+
+			try {
+
+				initialCell.setPlayer(null);
+				newCell.setPlayer(this);
+
+			} catch (Exception e) {}
+
+			game.notifyChange();
+
+			System.out.println("New Position: " + finalPos.toString());
+
 		}
-
-		// When we get a valid new position, the player is set in the corresponding cell in the board
-		Coordinate finalPos = (initialPos.translate(direction.getVector()));
-		newCell = game.getCell(finalPos);
-
-		try {
-
-			initialCell.setPlayer(null);
-			newCell.setPlayer(this);
-
-		} catch (Exception e) {}
-
-		game.notifyChange();
-
-		System.out.println("New Position: " + finalPos.toString());
-
 	}
-}
