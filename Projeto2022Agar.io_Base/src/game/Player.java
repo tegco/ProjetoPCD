@@ -44,25 +44,42 @@ public abstract class Player extends Thread  {
 		//System.out.println("Energy:" + originalStrength);
 		return originalStrength;
 	}
-	
+
 
 	public void movementOutcome(Player otherPlayer) throws InterruptedException {
-		
-		//byte currentPlayerStrength = this.player.getCurrentStrength();
+
 		byte otherPlayerStrength = otherPlayer.getCurrentStrength();
-		
+
 		//Se for um player ativo
 		if (otherPlayer.isActive()) {
-					setAfterConfrontationStrength(this, otherPlayer);
+
+			System.err.println("Player# " + this.getIdentification() + " e Player# " + otherPlayer.getIdentification()  + " confrontation!!!" );
+
+			setAfterConfrontationStrength(this, otherPlayer);
+
+			System.out.println("Player#" + otherPlayer.getIdentification() + " " +  "ativo");
+
+			this.getCurrentCell().setPlayer(this);
+			//this.wait();
+			//otherPlayer.wait();
+			otherPlayer.getCurrentCell().setPlayer(otherPlayer);
+			
+			//o vencedor esta a ficar bloqueado
+
 		}
 		//Se for um jogador morto
 		if (otherPlayer.isDead()) {
 			//bloqueado
+
+			System.out.println("BLOQUEADO - MORTO " + otherPlayer.toString());
+	
 			this.wait();
 		}
-		
+
 		if (this.hasMaxStrenght()) {
-			this.stop();
+
+			System.out.println(this.toString() + "ATINGOU PONTUAÇÃO MÁXIMA");
+			//this.stop();
 		}	
 	}
 
@@ -93,8 +110,10 @@ public abstract class Player extends Thread  {
 
 		Player winner = confrontationWinner(p1, p2);
 
+		System.out.println("Winner is Player#" + winner.getIdentification());
+
 		int s = p1.currentStrength += p2.currentStrength;
-		
+
 		if (s > 10) {
 			s = 10;
 		}
@@ -103,12 +122,17 @@ public abstract class Player extends Thread  {
 
 			p1.currentStrength = (byte) s;
 			p2.currentStrength = 0;
+			
+			//p2.interrupt();
 		}
 
 		else {
 			p2.currentStrength = (byte) s;
 			p1.currentStrength = 0;
+			
+			//p1.interrupt();
 		}
+		System.out.println("Player#" + p1.getIdentification() + ": " + p1.currentStrength + "; " + "Player#" + p2.getIdentification() + ": " + p2.currentStrength);
 
 	}
 
@@ -124,7 +148,7 @@ public abstract class Player extends Thread  {
 	public abstract void move(Direction direction) throws InterruptedException;
 
 	public abstract boolean isHumanPlayer();
-	
+
 	public boolean hasMaxStrenght () {
 		return this.currentStrength == Game.MAX_POSSIBLE_STRENGTH;
 	}
@@ -133,7 +157,7 @@ public abstract class Player extends Thread  {
 		return (this.currentStrength > 0 && this.currentStrength < 10);
 
 	}
-	
+
 	public boolean isDead() {
 		return this.currentStrength == 0;
 	}
