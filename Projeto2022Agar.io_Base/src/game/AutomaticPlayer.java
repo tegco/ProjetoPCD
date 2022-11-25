@@ -22,6 +22,7 @@ public class AutomaticPlayer extends Player {
 		try {
 
 			game.addPlayerToGame(this);
+		
 
 			System.out.println("Player#" + this.getIdentification() + " "  + this.getCurrentCell().getPosition().toString() + " Energy = " + this.getCurrentStrength());
 			//Thread.sleep(Game.INITIAL_WAITING_TIME);
@@ -33,31 +34,34 @@ public class AutomaticPlayer extends Player {
 		} 
 
 
-		long refresh_interval = Game.REFRESH_INTERVAL;
-
-		switch (this.originalStrength) {
-
-		case 2: refresh_interval = Game.REFRESH_INTERVAL * 2;
-		break;
-		case 3: refresh_interval = Game.REFRESH_INTERVAL * 3;
-		break;
-		}
+		long refresh_interval = Game.REFRESH_INTERVAL * this.originalStrength;
+		
+//		
+//		switch (this.originalStrength) {
+//
+//		case 2: refresh_interval = Game.REFRESH_INTERVAL * 2;
+//		break;
+//		case 3: refresh_interval = Game.REFRESH_INTERVAL * 3;
+//		break;
+//		}
 
 		while (true) {
 
-			for (int i = 0; i != Game.NUM_PLAYERS; i++) {				
 
 				try {
 
 					//System.out.println("-> Player#" + this.getIdentification() + " " + "Energy = " + this.getCurrentStrength());
 
 					this.move(Direction.randomDirectionGenerator());
-					Thread.sleep(refresh_interval*6);
+					Thread.sleep(refresh_interval);
 
 					//System.out.println("------------------------------");
 				}
+				
 				catch (Exception e) {}
-			}
+
+			if(getCurrentStrength() == 0 || getCurrentStrength()==10) 
+				break;
 		}
 	}
 
