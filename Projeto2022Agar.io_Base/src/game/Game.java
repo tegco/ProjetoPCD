@@ -7,10 +7,10 @@ import environment.Coordinate;
 
 public class Game extends Observable {
 
-	public static final int DIMY = 6;
-	public static final int DIMX = 6;
+	public static final int DIMY = 8;
+	public static final int DIMX = 8;
 	//private static final int NUM_PLAYERS = 90;
-	public static final int NUM_PLAYERS = 6;
+	public static final int NUM_PLAYERS = 5;
 	private static final int NUM_FINISHED_PLAYERS_TO_END_GAME=3;
 
 	public static final long REFRESH_INTERVAL = 400;

@@ -27,7 +27,7 @@ public class AutomaticPlayer extends Player {
 			e.printStackTrace();
 		} 
 
-		while (true) {
+		while (!stop) {
 
 			try {
 				//System.out.println("-> Player#" + this.getIdentification() + " " + "Energy = " + this.getCurrentStrength());
@@ -45,7 +45,7 @@ public class AutomaticPlayer extends Player {
 
 
 	@Override
-	public void move(Direction direction) throws InterruptedException {
+	public synchronized void move(Direction direction) throws InterruptedException {
 
 		// Get initial position of the player
 		Cell initialCell = this.getCurrentCell();

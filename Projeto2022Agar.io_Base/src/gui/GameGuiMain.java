@@ -4,6 +4,9 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.Random;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import game.AutomaticPlayer;
 import game.Game;

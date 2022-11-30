@@ -2,6 +2,10 @@ package game;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import environment.Cell;
 import environment.Coordinate;
@@ -18,6 +22,7 @@ public abstract class Player extends Thread  {
 	int id;
 	private byte currentStrength;
 	protected byte originalStrength;
+	public boolean stop = false;
 
 	public Cell getCurrentCell() {
 		return this.game.getCell(game.searchPlayerInBoard(this));
@@ -39,23 +44,32 @@ public abstract class Player extends Thread  {
 		return originalStrength;
 	}
 
-	public synchronized void movementOutcome(Player otherPlayer) throws InterruptedException {
+	public void movementOutcome(Player otherPlayer) throws InterruptedException {
 
 		if (otherPlayer.isActive()) {
 			setAfterConfrontationStrength(this, otherPlayer);
-			System.err.println("Player# " + this.getIdentification() + " e Player# " + otherPlayer.getIdentification()  + " confrontation!!!" );
+			System.err.println("Player#" + this.getIdentification() + " e Player#" + otherPlayer.getIdentification()  + " confrontation!!!" );
 			//this.getCurrentCell().setPlayer(this);
 			//otherPlayer.getCurrentCell().setPlayer(otherPlayer);
 		}
 
 		if (otherPlayer.isDead()) {
 			System.err.println("BLOCKED - OTHER PLAYER DEAD " + " Player#"+ this.getIdentification() + " Energia: " + this.currentStrength);
-			this.wait();
+			 
+			ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+	        executorService.schedule(() -> {
+				this.interrupt();
+				try {
+					this.move(Direction.randomDirectionGenerator());
+					System.out.println("Player#" + this.getIdentification() + " ESTOU A MEXER");
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				
+			}, 2, TimeUnit.SECONDS);
+	        
+	        this.wait();
 		}
-
-		if (this.hasMaxStrenght()) {
-			//System.out.println(this.toString() + "ATINGOU PONTUAÇÃO MÁXIMA");
-		}	
 	}
 
 	public static Player confrontationWinner(Player p1, Player p2) {
@@ -93,9 +107,16 @@ public abstract class Player extends Thread  {
 			p2.currentStrength = 0;
 		}
 
+
 		else {
 			p2.currentStrength = (byte) s;
 			p1.currentStrength = 0;
+		}
+
+		if (winner.hasMaxStrenght()) {
+			System.out.println("Player#" + winner.getIdentification() + " ATINGOU PONTUAÇÃO MÁXIMA");
+			winner.getState().toString();
+			winner.stop = true;
 		}
 		//System.out.println("Player#" + p1.getIdentification() + ": " + p1.currentStrength + "; " + "Player#" + p2.getIdentification() + ": " + p2.currentStrength);
 	}
