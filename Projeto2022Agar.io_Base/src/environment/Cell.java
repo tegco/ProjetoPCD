@@ -35,8 +35,8 @@ public class Cell {
 			}
 
 			while (this.isOcupied()) {
-
-				System.err.println("\nPosition " + this.player.getCurrentCell().getPosition().toString() + " is occupied by Player#" + player.getIdentification() + " and Player#" + newPlayer.getIdentification() + " is waiting!\n");
+				//VOLTAR A POR
+				//System.err.println("\nPosition " + this.player.getCurrentCell().getPosition().toString() + " is occupied by Player#" + player.getIdentification() + " and Player#" + newPlayer.getIdentification() + " is waiting!\n");
 				
 				cellFree.await();
 			}

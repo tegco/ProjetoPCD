@@ -3,11 +3,13 @@ package gui;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Random;
+import java.util.concurrent.CountDownLatch;
 
 import game.AutomaticPlayer;
 import game.Game;
 import game.PhoneyHumanPlayer;
 import game.Player;
+import game.SearcherThread;
 
 import javax.swing.JFrame;
 
@@ -36,8 +38,8 @@ public class GameGuiMain implements Observer {
 
 		//VOLTAR A POR COMO ORIGINALMENTE ESTAVA
 		//frame.setSize(800,800);
-		frame.setSize(450, 450);
-		frame.setLocation(225, 100);
+		frame.setSize(400, 400);
+		frame.setLocation(300, 100);
 		//frame.setLocation(0, 150);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
@@ -47,13 +49,37 @@ public class GameGuiMain implements Observer {
 		System.out.println("INITIAL PLACEMENT: \n" + "------------------");
 
 		frame.setVisible(true);
-
-		for (int i = 0; i < game.NUM_PLAYERS; i++) {
+		
+//		SearcherThread[] threads=new SearcherThread[Game.NUM_PLAYERS];
+//		CountDownLatch cdl = new CountDownLatch(Game.NUM_PLAYERS);
+		
+		for (int i = 0; i < Game.NUM_PLAYERS; i++) {
 
 			player = new AutomaticPlayer (i, game, (byte) Player.generateOriginalStrength());
 			player.start();
+			//threads[i]=new SearcherThread(player, cdl);
+			//threads[i].start();
 		}
 
+
+		//		for(int i=0; i!=game.NUM_PLAYERS;i++){
+		//			
+		//		}
+		//while(true) {
+//		try {
+//			cdl.await();
+//		} catch (Exception e) {
+//		}
+//		
+//		
+//		for(SearcherThread t:threads) {
+//			if(t.getState() == Thread.State.TIMED_WAITING) {
+//				System.out.println("OLA ENTREI AQUI");
+//				//player.sleep(10000);
+//				player.interrupt();
+//			}
+		//}
+		//}
 
 		//Testes de funções auxiliares
 

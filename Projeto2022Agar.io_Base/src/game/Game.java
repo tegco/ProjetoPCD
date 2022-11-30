@@ -7,10 +7,10 @@ import environment.Coordinate;
 
 public class Game extends Observable {
 
-	public static final int DIMY = 10;
-	public static final int DIMX = 10;
+	public static final int DIMY = 6;
+	public static final int DIMX = 6;
 	//private static final int NUM_PLAYERS = 90;
-	public static final int NUM_PLAYERS = 8;
+	public static final int NUM_PLAYERS = 6;
 	private static final int NUM_FINISHED_PLAYERS_TO_END_GAME=3;
 
 	public static final long REFRESH_INTERVAL = 400;
@@ -68,9 +68,8 @@ public class Game extends Observable {
 	public Coordinate searchPlayerInBoard (Player player) {
 
 		for (int x = 0; x < this.DIMX; x++) {
-
+			
 			for (int y = 0; y < this.DIMY; y++) {
-
 				Coordinate coord = new Coordinate (x, y); 
 
 				if ((this.getCell(coord)).isOcupied() && this.getCell(coord).getPlayer().id == player.id) {

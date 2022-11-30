@@ -14,17 +14,14 @@ import environment.Direction;
  */
 public abstract class Player extends Thread  {
 
-	protected  Game game;
-
+	protected Game game;
 	int id;
-
 	private byte currentStrength;
 	protected byte originalStrength;
 
 	public Cell getCurrentCell() {
 		return this.game.getCell(game.searchPlayerInBoard(this));
 	}
-
 
 	public Player(int id, Game game, byte strength) {
 		super();
@@ -34,55 +31,37 @@ public abstract class Player extends Thread  {
 		originalStrength=strength;
 	}
 
-
 	// Generate a player's initial strength randomly, from 1 to 3 (inclusive)
 	public static int generateOriginalStrength() {
-
 		Random random = new Random();
-
 		int originalStrength = random.nextInt(3 - 1 + 1) + 1;
 		//System.out.println("Energy:" + originalStrength);
 		return originalStrength;
 	}
 
+	public synchronized void movementOutcome(Player otherPlayer) throws InterruptedException {
 
-	public void movementOutcome(Player otherPlayer) throws InterruptedException {
-
-		byte otherPlayerStrength = otherPlayer.getCurrentStrength();
-
-		//Se for um player ativo
 		if (otherPlayer.isActive()) {
-
-			System.err.println("Player# " + this.getIdentification() + " e Player# " + otherPlayer.getIdentification()  + " confrontation!!!" );
 			setAfterConfrontationStrength(this, otherPlayer);
-
-			//System.out.println("Player#" + otherPlayer.getIdentification() + " " +  "ativo");
-			this.getCurrentCell().setPlayer(this);
-			//this.wait();
-			//otherPlayer.wait();
-			otherPlayer.getCurrentCell().setPlayer(otherPlayer);
-
-			//o vencedor esta a ficar bloqueado
-
+			System.err.println("Player# " + this.getIdentification() + " e Player# " + otherPlayer.getIdentification()  + " confrontation!!!" );
+			//this.getCurrentCell().setPlayer(this);
+			//otherPlayer.getCurrentCell().setPlayer(otherPlayer);
 		}
-		//Se for um jogador morto
-		if (otherPlayer.isDead()) {
 
-			System.out.println("MOVIMENTO DEVE SER BLOQUEADO - JOGADOR MORTO " + otherPlayer.toString());
+		if (otherPlayer.isDead()) {
+			System.err.println("BLOCKED - OTHER PLAYER DEAD " + " Player#"+ this.getIdentification() + " Energia: " + this.currentStrength);
 			this.wait();
 		}
 
 		if (this.hasMaxStrenght()) {
-			System.out.println(this.toString() + "ATINGOU PONTUAÇÃO MÁXIMA");
+			//System.out.println(this.toString() + "ATINGOU PONTUAÇÃO MÁXIMA");
 		}	
 	}
 
-	// -> FUNCIONA
 	public static Player confrontationWinner(Player p1, Player p2) {
 
 		if (p1.currentStrength > p2.currentStrength) {
 			return p1;
-
 		}
 
 		if (p1.currentStrength == p2.currentStrength) {
@@ -94,17 +73,14 @@ public abstract class Player extends Thread  {
 				return p1;
 			}
 			return p2;
-
 		}
 		return p2;
 	}
 
-	// -> FUNCIONA
 	public static void setAfterConfrontationStrength (Player p1, Player p2) {
 
 		Player winner = confrontationWinner(p1, p2);
-
-		System.out.println("Winner is Player#" + winner.getIdentification());
+		//System.out.println("Winner is Player#" + winner.getIdentification());
 
 		int s = p1.currentStrength += p2.currentStrength;
 
@@ -113,29 +89,21 @@ public abstract class Player extends Thread  {
 		}
 
 		if (p1 == winner) {
-
 			p1.currentStrength = (byte) s;
 			p2.currentStrength = 0;
-
-			//p2.interrupt();
 		}
 
 		else {
 			p2.currentStrength = (byte) s;
 			p1.currentStrength = 0;
-
-			//p1.interrupt();
 		}
-		System.out.println("Player#" + p1.getIdentification() + ": " + p1.currentStrength + "; " + "Player#" + p2.getIdentification() + ": " + p2.currentStrength);
-
+		//System.out.println("Player#" + p1.getIdentification() + ": " + p1.currentStrength + "; " + "Player#" + p2.getIdentification() + ": " + p2.currentStrength);
 	}
 
 	public boolean isValidPosition (Coordinate newCoord) {
-
 		if (game.isWithinBounds(newCoord)) {
 			return true;
 		}
-
 		return false;
 	}
 
@@ -149,7 +117,6 @@ public abstract class Player extends Thread  {
 
 	public boolean isActive () {
 		return (this.currentStrength > 0 && this.currentStrength < 10);
-
 	}
 
 	public boolean isDead() {
