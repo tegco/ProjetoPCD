@@ -2,6 +2,8 @@ package game;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.BrokenBarrierException;
+import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
@@ -23,6 +25,9 @@ public abstract class Player extends Thread  {
 	private byte currentStrength;
 	protected byte originalStrength;
 	public boolean stop = false;
+
+	static CyclicBarrier barrier;
+	static Player[] threads = new Player[3];
 
 	public Cell getCurrentCell() {
 		return this.game.getCell(game.searchPlayerInBoard(this));
@@ -54,21 +59,20 @@ public abstract class Player extends Thread  {
 		}
 
 		if (otherPlayer.isDead()) {
+
 			System.err.println("BLOCKED - OTHER PLAYER DEAD " + " Player#"+ this.getIdentification() + " Energia: " + this.currentStrength);
-			 
+
 			ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
-	        executorService.schedule(() -> {
+
+			executorService.schedule(() -> {
+
 				this.interrupt();
-				try {
-					this.move(Direction.randomDirectionGenerator());
-					System.out.println("Player#" + this.getIdentification() + " ESTOU A MEXER");
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-				
-			}, 2, TimeUnit.SECONDS);
-	        
-	        this.wait();
+
+				System.out.println("Player#" + this.getIdentification() + " Energia: " + this.currentStrength +  " ESTOU A MEXER");
+
+			}, 5, TimeUnit.SECONDS);
+
+			this.wait();
 		}
 	}
 
@@ -116,10 +120,39 @@ public abstract class Player extends Thread  {
 		if (winner.hasMaxStrenght()) {
 			System.out.println("Player#" + winner.getIdentification() + " ATINGOU PONTUAÇÃO MÁXIMA");
 			winner.getState().toString();
-			winner.stop = true;
+			//winner.stop = true;
+
+			barrier =  new CyclicBarrier(3); new Runnable() {
+
+				//System.out.println("Estou aqui");
+
+				//@Override
+				public void run() {
+
+					System.out.println("Estou aqui");
+
+					try {
+
+						System.out.println("Thread " + currentThread().getName() + "is calling await");
+
+						barrier.await();
+
+						System.out.println("Thread " + currentThread().getName() + "started running again");
+
+					} catch (InterruptedException | BrokenBarrierException e) {
+
+						e.printStackTrace();
+					}
+
+				}
+
+			};
 		}
-		//System.out.println("Player#" + p1.getIdentification() + ": " + p1.currentStrength + "; " + "Player#" + p2.getIdentification() + ": " + p2.currentStrength);
+
 	}
+
+
+	//System.out.println("Player#" + p1.getIdentification() + ": " + p1.currentStrength + "; " + "Player#" + p2.getIdentification() + ": " + p2.currentStrength);
 
 	public boolean isValidPosition (Coordinate newCoord) {
 		if (game.isWithinBounds(newCoord)) {

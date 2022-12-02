@@ -10,7 +10,7 @@ public class Game extends Observable {
 	public static final int DIMY = 8;
 	public static final int DIMX = 8;
 	//private static final int NUM_PLAYERS = 90;
-	public static final int NUM_PLAYERS = 5;
+	public static final int NUM_PLAYERS = 6;
 	private static final int NUM_FINISHED_PLAYERS_TO_END_GAME=3;
 
 	public static final long REFRESH_INTERVAL = 400;
@@ -60,16 +60,16 @@ public class Game extends Observable {
 	}
 
 	public boolean isWithinBounds(Coordinate coord) {
-		return coord.x >= 0 && coord.y >= 0 && coord.x < this.DIMX && coord.y < this.DIMY;
+		return coord.x >= 0 && coord.y >= 0 && coord.x < Game.DIMX && coord.y < DIMY;
 	}
 
 	// Searchs game board and if a cell is occupied, compares the player in that cell with we player we are locking for. 
 	// If its a match, return its coordinate
 	public Coordinate searchPlayerInBoard (Player player) {
 
-		for (int x = 0; x < this.DIMX; x++) {
+		for (int x = 0; x < Game.DIMX; x++) {
 			
-			for (int y = 0; y < this.DIMY; y++) {
+			for (int y = 0; y < Game.DIMY; y++) {
 				Coordinate coord = new Coordinate (x, y); 
 
 				if ((this.getCell(coord)).isOcupied() && this.getCell(coord).getPlayer().id == player.id) {

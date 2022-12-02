@@ -26,7 +26,7 @@ public class SearcherThread extends Thread {
 //				e.printStackTrace();
 //			}
 //			this.interrupt();
-		state =	player.getState();
+		//state =	player.getState();
 		cdl.countDown();
 			
 		
