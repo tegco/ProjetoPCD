@@ -1,4 +1,6 @@
 package game;
+import java.awt.event.KeyEvent;
+import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -12,6 +14,7 @@ import java.util.concurrent.TimeUnit;
 import environment.Cell;
 import environment.Coordinate;
 import environment.Direction;
+import gui.BoardJComponent;
 
 /**
  * Represents a player.
@@ -21,13 +24,14 @@ import environment.Direction;
 public abstract class Player extends Thread  {
 
 	protected Game game;
+	BoardJComponent boardJComponent;
 	int id;
 	private byte currentStrength;
 	protected byte originalStrength;
 	public boolean stop = false;
 
 	static CyclicBarrier barrier;
-	static Player[] threads = new Player[3];
+	//static Player[] threads = new Player[3];
 
 	public Cell getCurrentCell() {
 		return this.game.getCell(game.searchPlayerInBoard(this));
@@ -36,9 +40,9 @@ public abstract class Player extends Thread  {
 	public Player(int id, Game game, byte strength) {
 		super();
 		this.id = id;
-		this.game=game;
-		currentStrength=strength;
-		originalStrength=strength;
+		this.game = game;
+		currentStrength = strength;
+		originalStrength = strength; //ver
 	}
 
 	// Generate a player's initial strength randomly, from 1 to 3 (inclusive)
@@ -52,27 +56,37 @@ public abstract class Player extends Thread  {
 	public void movementOutcome(Player otherPlayer) throws InterruptedException {
 
 		if (otherPlayer.isActive()) {
+
 			setAfterConfrontationStrength(this, otherPlayer);
 			System.err.println("Player#" + this.getIdentification() + " e Player#" + otherPlayer.getIdentification()  + " confrontation!!!" );
 			//this.getCurrentCell().setPlayer(this);
 			//otherPlayer.getCurrentCell().setPlayer(otherPlayer);
 		}
 
+
 		if (otherPlayer.isDead()) {
 
-			System.err.println("BLOCKED - OTHER PLAYER DEAD " + " Player#"+ this.getIdentification() + " Energia: " + this.currentStrength);
+			if (isHumanPlayer()) {
 
-			ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+				boardJComponent.clearLastPressedDirection();
+			}
 
-			executorService.schedule(() -> {
+			else {
 
-				this.interrupt();
+				System.err.println("BLOCKED - OTHER PLAYER DEAD " + " Player#"+ this.getIdentification() + " Energia: " + this.currentStrength);
 
-				System.out.println("Player#" + this.getIdentification() + " Energia: " + this.currentStrength +  " ESTOU A MEXER");
+				ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
 
-			}, 5, TimeUnit.SECONDS);
+				executorService.schedule(() -> {
 
-			this.wait();
+					this.interrupt();
+
+					System.out.println("Player#" + this.getIdentification() + " Energia: " + this.currentStrength +  " ESTOU A MEXER");
+
+				}, 5, TimeUnit.SECONDS);
+
+				this.wait();
+			}
 		}
 	}
 
@@ -151,7 +165,6 @@ public abstract class Player extends Thread  {
 
 	}
 
-
 	//System.out.println("Player#" + p1.getIdentification() + ": " + p1.currentStrength + "; " + "Player#" + p2.getIdentification() + ": " + p2.currentStrength);
 
 	public boolean isValidPosition (Coordinate newCoord) {
@@ -162,6 +175,10 @@ public abstract class Player extends Thread  {
 	}
 
 	public abstract void move(Direction direction) throws InterruptedException;
+
+	public void move(KeyEvent keyPressed) throws InterruptedException {
+
+	}
 
 	public abstract boolean isHumanPlayer();
 

@@ -1,5 +1,6 @@
 package game;
 
+import java.awt.event.KeyEvent;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -9,26 +10,29 @@ import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
 
-import environment.Direction;
-
-public class Client extends Player {
+public class Client /*extends Player*/ {
 
 	private BufferedReader in;
 	private PrintWriter out;
 	private Socket socket;
+	public static final int PORT = Server.PORT;
+	private static InetAddress address;
 
-	int id;
+	//int id;
 	protected Game game;
-	private static final int INITIAL_STRENGHT = 5;
-	//protected byte originalStrength;
+	static KeyEvent left, right, up, down;
 
-	public Client(int id, Game game, byte strength) {
-		super(id, game, strength);
+	public Client(int PORT,InetAddress address, KeyEvent left, KeyEvent right, KeyEvent up, KeyEvent down) {
+		Client.address = address;
+		Client.left = left;
+		Client.right = right;
+		Client.up = up;
+		Client.down = down;	
 	}
 
 	public static void main(String[] args) {
 
-		//new Client(id, game, currentStrength).runClient();
+		new Client(PORT, address, left,right, up, down).runClient();
 	}
 
 	public void runClient() {
@@ -36,20 +40,20 @@ public class Client extends Player {
 		try {
 			connectToServer();
 			sendMessages();
-		} catch (IOException e) {// ERRO...
-		} finally {//a fechar...
+		} catch (IOException e) {
+		} finally {
 			try {
 				socket.close();
-			} catch (IOException e) {//... 
+			} catch (IOException e) {
 			}
 		}
 	}
 
 	void connectToServer() throws IOException {
 
-		InetAddress endereco = InetAddress.getByName(null);
-		System.out.println("Endereco:" + endereco);
-		socket = new Socket(endereco, Server.PORTO);
+		address = InetAddress.getByName(null);
+		System.out.println("Endereco:" + address);
+		socket = new Socket(address, Server.PORT);
 		System.out.println("Socket:" + socket);
 		in = new BufferedReader(new InputStreamReader(
 				socket.getInputStream()));
@@ -66,22 +70,10 @@ public class Client extends Player {
 			System.out.println(str);
 			try {
 				Thread.sleep(3000);
-			} catch (InterruptedException e) {//...  
+			} catch (InterruptedException e) { 
 			}
 		}
 		out.println("FIM");
-	}
-
-	@Override
-	public void move(Direction direction) throws InterruptedException {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public boolean isHumanPlayer() {
-		// TODO Auto-generated method stub
-		return false;
 	}
 
 }
