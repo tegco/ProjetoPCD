@@ -1,5 +1,7 @@
 package game;
 
+import java.io.Serializable;
+
 import environment.Cell;
 import environment.Coordinate;
 import environment.Direction;
@@ -9,7 +11,8 @@ import environment.Direction;
  * @author luismota
  *
  */
-public class PhoneyHumanPlayer extends Player {
+public class PhoneyHumanPlayer extends Player{
+
 	public PhoneyHumanPlayer(int id, Game game, byte strength) {
 		super(id, game, strength);
 	}

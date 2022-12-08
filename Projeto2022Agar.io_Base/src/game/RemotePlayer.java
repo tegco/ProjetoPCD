@@ -1,11 +1,13 @@
 package game;
 
+import java.io.Serializable;
+
 import environment.Cell;
 import environment.Coordinate;
 import environment.Direction;
 import gui.BoardJComponent;
 
-public class RemotePlayer extends Player {
+public class RemotePlayer extends Player  implements Serializable {
 
 	private static final int INITIAL_STRENGHT = 5;
 

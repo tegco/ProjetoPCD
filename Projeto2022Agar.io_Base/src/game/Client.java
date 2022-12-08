@@ -10,7 +10,7 @@ import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
 
-public class Client /*extends Player*/ {
+public class Client {
 
 	private BufferedReader in;
 	private PrintWriter out;
@@ -22,7 +22,7 @@ public class Client /*extends Player*/ {
 	protected Game game;
 	static KeyEvent left, right, up, down;
 
-	public Client(int PORT,InetAddress address, KeyEvent left, KeyEvent right, KeyEvent up, KeyEvent down) {
+	public Client(int PORT, InetAddress address, KeyEvent left, KeyEvent right, KeyEvent up, KeyEvent down) {
 		Client.address = address;
 		Client.left = left;
 		Client.right = right;
@@ -38,9 +38,12 @@ public class Client /*extends Player*/ {
 	public void runClient() {
 
 		try {
+
 			connectToServer();
-			sendMessages();
+			sendDirection();
+
 		} catch (IOException e) {
+
 		} finally {
 			try {
 				socket.close();
@@ -52,9 +55,12 @@ public class Client /*extends Player*/ {
 	void connectToServer() throws IOException {
 
 		address = InetAddress.getByName(null);
+
 		System.out.println("Endereco:" + address);
+
 		socket = new Socket(address, Server.PORT);
 		System.out.println("Socket:" + socket);
+
 		in = new BufferedReader(new InputStreamReader(
 				socket.getInputStream()));
 		out = new PrintWriter(new BufferedWriter(
@@ -62,19 +68,37 @@ public class Client /*extends Player*/ {
 				true);
 	}
 
-	void sendMessages() throws IOException {
+	void sendDirection() throws IOException {
 
-		for (int i = 0; i < 10; i++) {
-			out.println("Ola " + i);
-			String str = in.readLine();
-			System.out.println(str);
-			try {
-				Thread.sleep(3000);
-			} catch (InterruptedException e) { 
+		String direction = in.readLine();
+
+		while (true) {
+
+			if(direction == null) {
+				break;
 			}
+
+			System.out.println("HumanPlayer:" + direction);
+			out.println(direction);	
 		}
-		out.println("FIM");
 	}
+
+//
+//	void sendDirection() throws IOException {
+//
+//		for (int i = 0; i < 90; i++) {
+//			
+//			out.println("Ola " + i);
+//			String str = in.readLine();
+//			System.out.println(str);
+//			
+//			try {
+//				Thread.sleep(Game.REFRESH_INTERVAL);
+//				
+//			} catch (InterruptedException e) {}
+//		}
+//		out.println("FIM");
+//	}
 
 }
 
