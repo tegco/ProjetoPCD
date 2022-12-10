@@ -11,6 +11,7 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -24,10 +25,10 @@ public class Client {
 	private static InetAddress address;
 
 	ExecutorService executorService = Executors.newFixedThreadPool(90);
-	
+
 	protected Game game;
 	private BoardJComponent boardGui;
-	
+
 	static KeyEvent left, right, up, down;
 
 	public Client(int PORT, InetAddress address, KeyEvent left, KeyEvent right, KeyEvent up, KeyEvent down) {
@@ -43,17 +44,22 @@ public class Client {
 		new Client(MyServer.PORT, address, left,right, up, down).runClient();
 	}
 
-		private ObjectInputStream in;
-		private PrintWriter out;
+	private ObjectInputStream in;
+	private PrintWriter out;
+
 	public void runClient() {
 
 		try {
 
 			connectToServer();
+			getGameState();
 			sendDirection();
 
 		} catch (IOException e) {
 
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		} finally {
 			try {
 				socket.close();
@@ -62,70 +68,48 @@ public class Client {
 		}
 	}
 
-		void connectToServer() throws IOException {
+	void connectToServer() throws IOException {
 
-			address = InetAddress.getByName(null);
+		address = InetAddress.getByName(null);
 
-			System.out.println("Endereco:" + address);
+		System.out.println("Endereco:" + address);
 
-			socket = new Socket(address, MyServer.PORT);
-			System.out.println("Socket:" + socket);
+		socket = new Socket(address, MyServer.PORT);
+		System.out.println("Socket:" + socket);
 
-			in = new ObjectInputStream(socket.getInputStream());
+		in = new ObjectInputStream(socket.getInputStream());
 
-			try {
-				game = (Game) in.readObject();
+		System.out.println("CLIENT IN_CHANNEL: "+ in.toString());
 
-				System.out.println("CLIENT  "  + game.toString());
-				
-			} catch (ClassNotFoundException e) {
+		out = new PrintWriter(new BufferedWriter(
+				new OutputStreamWriter(socket.getOutputStream())),
+				true);
+	}
 
-				e.printStackTrace();
-			} catch (IOException e) {
+	void getGameState() throws ClassNotFoundException, IOException {
 
-				e.printStackTrace();
-			}
+		boardGui = (BoardJComponent) in.readObject();
+		game = boardGui.getGame();
 
-			out = new PrintWriter(new BufferedWriter(
-					new OutputStreamWriter(socket.getOutputStream())),
-					true);
-		}
+		System.out.println("CLIENT  "  + boardGui.getLastPressedDirection());
+	}
 
-		void sendDirection() throws IOException {
+	void sendDirection() throws IOException {
+		Direction direction = null;
 
-			Direction direction = boardGui.getLastPressedDirection();
-			
-			System.out.println("DIRECTION:  " + direction.name());
+		while (true) {
+			direction = boardGui.getLastPressedDirection();
 
-			while (true) {
-
-				if(direction == null) {
-					
-					System.out.println("NULL");
-					break;
-				}
-
-				//System.out.println("HumanPlayer:" + direction);
-
-				out.println(direction);	
+			if(direction != null) {
+				break;
 			}
 		}
+		System.out.println("HumanPlayer:" + direction);
 
-		//
-		//	void sendDirection() throws IOException {
-		//
-		//		for (int i = 0; i < 90; i++) {
-		//			
-		//			out.println("Ola " + i);
-		//			String str = in.readLine();
-		//			System.out.println(str);
-		//			
-		//			try {
-		//				Thread.sleep(Game.REFRESH_INTERVAL);
-		//				
-		//			} catch (InterruptedException e) {}
-		//		}
-		//		out.println("FIM");
-		//	}
+		out.println(direction.name());
+		boardGui.clearLastPressedDirection();
+
+	}
+
 }
 

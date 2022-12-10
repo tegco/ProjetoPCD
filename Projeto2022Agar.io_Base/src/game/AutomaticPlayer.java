@@ -23,8 +23,7 @@ public class AutomaticPlayer extends Player implements Serializable {
 		try {
 			game.addPlayerToGame(this);
 			//System.out.println("Player#" + this.getIdentification() + " "  + this.getCurrentCell().getPosition().toString() + " Energy = " + this.getCurrentStrength());
-			Thread.sleep(2000);
-			//Thread.sleep(Game.INITIAL_WAITING_TIME);
+			Thread.sleep(Game.INITIAL_WAITING_TIME);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		} 

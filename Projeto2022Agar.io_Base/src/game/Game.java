@@ -18,7 +18,8 @@ public class Game extends Observable implements Serializable  {
 	public static final double MAX_INITIAL_STRENGTH = 3;
 	public static final double MAX_POSSIBLE_STRENGTH = 10;
 	public static final long MAX_WAITING_TIME_FOR_MOVE = 2000;
-	public static final long INITIAL_WAITING_TIME = 10000;
+	//public static final long INITIAL_WAITING_TIME = 10000;
+	public static final long INITIAL_WAITING_TIME = 3000;
 
 
 	protected Cell[][] board;
