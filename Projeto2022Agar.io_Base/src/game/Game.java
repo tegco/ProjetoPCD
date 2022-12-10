@@ -1,11 +1,12 @@
 package game;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 import environment.Cell;
 import environment.Coordinate;
 
-public class Game extends Observable {
+public class Game extends Observable implements Serializable  {
 
 	public static final int DIMY = 8;
 	public static final int DIMX = 8;

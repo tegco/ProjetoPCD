@@ -1,15 +1,13 @@
 package game;
 
-import java.io.Serializable;
-
 import environment.Cell;
 import environment.Coordinate;
 import environment.Direction;
 import gui.BoardJComponent;
 
-public class RemotePlayer extends Player  implements Serializable {
+public class RemotePlayer extends Player {
 
-	private static final int INITIAL_STRENGHT = 5;
+	private static final byte INITIAL_STRENGHT = 5;
 
 	BoardJComponent boardJComponent;
 
@@ -48,7 +46,6 @@ public class RemotePlayer extends Player  implements Serializable {
 			}
 			game.notifyChange();
 		}
-
 	}
 
 	@Override

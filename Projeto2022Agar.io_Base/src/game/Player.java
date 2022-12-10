@@ -1,5 +1,6 @@
 package game;
 import java.awt.event.KeyEvent;
+import java.io.Serializable;
 import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +22,7 @@ import gui.BoardJComponent;
  * @author luismota
  *
  */
-public abstract class Player extends Thread  {
+public abstract class Player extends Thread implements Serializable {
 
 	protected Game game;
 	BoardJComponent boardJComponent;

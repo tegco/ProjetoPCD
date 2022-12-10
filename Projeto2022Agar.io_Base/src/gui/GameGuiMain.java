@@ -1,24 +1,15 @@
 package gui;
 
+import java.io.IOException;
 import java.util.Observable;
 import java.util.Observer;
-import java.util.Random;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
-
 import game.AutomaticPlayer;
 import game.Game;
-import game.PhoneyHumanPlayer;
+import game.MyServer;
 import game.Player;
-import game.SearcherThread;
+//import game.SearcherThread;
 
 import javax.swing.JFrame;
-
-import environment.Cell;
-import environment.Coordinate;
-import environment.Direction;
 
 public class GameGuiMain implements Observer {
 
@@ -26,9 +17,11 @@ public class GameGuiMain implements Observer {
 	private BoardJComponent boardGui;
 	private Game game;
 	public Player player;
+	private final boolean alternativeKeys;
 
 	public GameGuiMain() {
 		super();
+		this.alternativeKeys = true;
 		game = new Game();
 		game.addObserver(this);
 
@@ -36,7 +29,8 @@ public class GameGuiMain implements Observer {
 	}
 
 	private void buildGui() {
-		boardGui = new BoardJComponent(game);
+		
+		boardGui = new BoardJComponent(game, alternativeKeys);
 		frame.add(boardGui);
 
 		//VOLTAR A POR COMO ORIGINALMENTE ESTAVA
@@ -53,64 +47,11 @@ public class GameGuiMain implements Observer {
 
 		frame.setVisible(true);
 		
-//		SearcherThread[] threads=new SearcherThread[Game.NUM_PLAYERS];
-//		CountDownLatch cdl = new CountDownLatch(Game.NUM_PLAYERS);
-		
 		for (int i = 0; i < Game.NUM_PLAYERS; i++) {
 
 			player = new AutomaticPlayer (i, game, (byte) Player.generateOriginalStrength());
 			player.start();
-			//threads[i]=new SearcherThread(player, cdl);
-			//threads[i].start();
 		}
-
-
-		//		for(int i=0; i!=game.NUM_PLAYERS;i++){
-		//			
-		//		}
-		//while(true) {
-//		try {
-//			cdl.await();
-//		} catch (Exception e) {
-//		}
-//		
-//		
-//		for(SearcherThread t:threads) {
-//			if(t.getState() == Thread.State.TIMED_WAITING) {
-//				System.out.println("OLA ENTREI AQUI");
-//				//player.sleep(10000);
-//				player.interrupt();
-//			}
-		//}
-		//}
-
-		//Testes de funções auxiliares
-
-		//winnerPlayer &&  setAfterConfrontationStrength
-
-		//			Player p1 = new AutomaticPlayer (1, game, (byte) Player.generateOriginalStrength());
-		//			Player p2 = new AutomaticPlayer (2, game, (byte) Player.generateOriginalStrength());
-
-
-		//	System.out.println("Player#" + p1.getIdentification() + " " + "Energy " + p1.getCurrentStrength());
-		//	System.out.println("Player#" + p2.getIdentification() + " " + "Energy " + p2.getCurrentStrength());
-		//	System.out.println("Winner: Player#"+ Player.confrontationWinner(p1, p2).getIdentification());
-		//	
-		//	
-		//	Player.setAfterConfrontationStrength(p1, p2);
-		//	
-		//	System.out.println("Player#" + p1.getIdentification() + " " + "Energy " + p1.getCurrentStrength());
-		//	System.out.println("Player#" + p2.getIdentification() + " " + "Energy " + p2.getCurrentStrength());
-
-		//---------------------------------------------------------------------------------------------------//
-
-		//game.searchPlayerInBoard(player);
-		//player.getCurrentCell().setPlayer(player);
-
-
-		//game.notifyChange();
-
-		//System.out.println("Cell:" + player.getCurrentCell().getPosition()); 
 	}
 
 	@Override
@@ -118,9 +59,13 @@ public class GameGuiMain implements Observer {
 		boardGui.repaint();
 	}
 
-	public static void main(String[] args) throws InterruptedException {
+	public static void main(String[] args) throws InterruptedException, IOException {
 
 		GameGuiMain game = new GameGuiMain();
 		game.init();
+		
+		MyServer server = new MyServer(game.boardGui);
+		server.startServing();
+		
 	}
 }

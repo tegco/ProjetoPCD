@@ -4,7 +4,9 @@ import environment.Cell;
 import environment.Coordinate;
 import environment.Direction;
 
-public class AutomaticPlayer extends Player {
+import java.io.Serializable;
+
+public class AutomaticPlayer extends Player implements Serializable {
 
 	public AutomaticPlayer(int id, Game game, byte strength) {
 		super(id, game, strength);
@@ -32,7 +34,7 @@ public class AutomaticPlayer extends Player {
 			try {
 				//System.out.println("-> Player#" + this.getIdentification() + " " + "Energy = " + this.getCurrentStrength());
 				this.move(Direction.randomDirectionGenerator());
-				Thread.sleep(Game.REFRESH_INTERVAL * this.originalStrength*2);
+				Thread.sleep(Game.REFRESH_INTERVAL * this.originalStrength);
 				//System.out.println("------------------------------");
 			}
 			catch (Exception e) {}
