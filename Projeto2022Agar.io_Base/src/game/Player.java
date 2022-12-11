@@ -77,22 +77,28 @@ public abstract class Player extends Thread implements Serializable {
 		if (otherPlayer.isDead()) {
 
 			if (!isHumanPlayer()) {
-
-				System.err.println("BLOCKED - OTHER PLAYER DEAD " + " Player#"+ this.getIdentification() + " Energia: " + this.currentStrength);
-
-				ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
-
-				executorService.schedule(() -> {
-
-					this.interrupt();
-
-					System.out.println("Player#" + this.getIdentification() + " Energia: " + this.currentStrength +  " ESTOU A MEXER");
-
-				}, 5, TimeUnit.SECONDS);
-
-				this.wait();
+				resolveBlockedMovement();
+				
 			}
 		}
+	}
+	
+	public void resolveBlockedMovement() throws InterruptedException {
+		
+		System.err.println("BLOCKED - OTHER PLAYER DEAD " + " Player#"+ this.getIdentification() + " Energia: " + this.currentStrength);
+		
+		ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+
+		executorService.schedule(() -> {
+
+			this.interrupt();
+
+			System.out.println("Player#" + this.getIdentification() + " Energia: " + this.currentStrength +  " ESTOU A MEXER");
+
+		}, 5, TimeUnit.SECONDS);
+
+		this.wait();
+		
 	}
 
 	public static Player confrontationWinner(Player p1, Player p2) {

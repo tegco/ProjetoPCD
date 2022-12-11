@@ -38,6 +38,11 @@ public class Cell implements Serializable {
 				//VOLTAR A POR
 				System.err.println("\nPosition " + this.player.getCurrentCell().getPosition().toString() + " is occupied by Player#" + player.getIdentification() + " and Player#" + newPlayer.getIdentification() + " is waiting!\n");
 				
+				if(this.player.isDead()) {
+					
+					newPlayer.resolveBlockedMovement();
+				}
+				
 				cellFree.await();
 			}
 
