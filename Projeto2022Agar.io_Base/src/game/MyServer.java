@@ -95,7 +95,13 @@ public class MyServer {
 
 		private void sendGameState() throws IOException, InterruptedException {
 			out.reset();
+			try {
+			Thread.sleep(Game.REFRESH_INTERVAL);
+			} catch (InterruptedException e) {
+				
+									}
 			out.writeObject(boardGui);
+			
 			System.out.println("\nServer ENVIOU este game");
 			game.printBoard();
 			getDirection();
@@ -113,9 +119,10 @@ public class MyServer {
 					
 					if(remotePlayer.getCurrentCell() != null) {
 						remotePlayer.move(direction);
+						//Thread.sleep(Game.REFRESH_INTERVAL);
 					}
 
-					boardGui.clearLastPressedDirection();
+					
 					break;
 				}
 			}

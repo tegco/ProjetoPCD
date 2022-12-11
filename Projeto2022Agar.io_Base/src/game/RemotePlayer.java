@@ -23,7 +23,8 @@ public class RemotePlayer extends Player {
 		try {
 			game.addPlayerToGame(this);
 			//System.out.println("Player#" + this.getIdentification() + " "  + this.getCurrentCell().getPosition().toString() + " Energy = " + this.getCurrentStrength());
-			//Thread.sleep(Game.INITIAL_WAITING_TIME);
+			Thread.sleep(Game.INITIAL_WAITING_TIME);
+			
 			System.out.println("\nNEW PLAYER ON POSITION (" + this.getCurrentCell().getPosition().y + ", " + this.getCurrentCell().getPosition().x+")");
 		} catch (InterruptedException e) {
 			e.printStackTrace();

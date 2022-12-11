@@ -13,7 +13,7 @@ public class Game extends Observable implements Serializable  {
 	public static final int DIMY = 12;
 	public static final int DIMX = 12;
 	//private static final int NUM_PLAYERS = 90;
-	public static final int NUM_PLAYERS = 30;
+	public static final int NUM_PLAYERS = 6;
 	public static final int NUM_HUMANS = 2;
 	//RESTORE
 	private static final int NUM_FINISHED_PLAYERS_TO_END_GAME=3;

@@ -109,19 +109,23 @@ public class Client {
 		void sendDirection() throws IOException, ClassNotFoundException {
 			Direction direction;
 			while(true) {
-				direction = Direction.randomDirectionGenerator();
-				//direction = boardGui.getLastPressedDirection();
+				//direction = Direction.randomDirectionGenerator();
+				boardGui.clearLastPressedDirection();
+				direction = boardGui.getLastPressedDirection();
 				if (direction != null) {
 					out.println(direction.name());	
-					try {
+					//try {
 						System.out.println("I Sleep!!!!!!");
 						System.out.println("\nCliente ENVIOU DIR. --> " + direction);
-						Thread.sleep(Game.REFRESH_INTERVAL);
-						getGameState();
-					} catch (InterruptedException e) {
-
-					}
+						//Thread.sleep(Game.REFRESH_INTERVAL);
+						
+//					} catch (InterruptedException e) {
+//
+//					}
+					
+					getGameState();
 				}
+				
 			}
 			
 		}
