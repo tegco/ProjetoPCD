@@ -4,6 +4,7 @@ import environment.Coordinate;
 import environment.Direction;
 import game.Game;
 import game.Player;
+//import sun.awt.ExtendedKeyCodes;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -96,9 +97,7 @@ public class BoardJComponent extends JComponent implements KeyListener {
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		
-		//System.out.println(e.toString());
-		
+
 		if(alternativeKeys) {
 			switch(e.getKeyCode()){	
 			case  KeyEvent.VK_A:

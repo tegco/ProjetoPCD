@@ -8,7 +8,7 @@ import java.io.Serializable;
 
 public class AutomaticPlayer extends Player implements Serializable {
 
-	public AutomaticPlayer(int id, Game game, byte strength) {
+	public AutomaticPlayer(int id, Game game, byte strength) throws InterruptedException {
 		super(id, game, strength);
 	}
 
@@ -33,7 +33,7 @@ public class AutomaticPlayer extends Player implements Serializable {
 			try {
 				//System.out.println("-> Player#" + this.getIdentification() + " " + "Energy = " + this.getCurrentStrength());
 				this.move(Direction.randomDirectionGenerator());
-				Thread.sleep(Game.REFRESH_INTERVAL * this.originalStrength);
+				Thread.sleep(Game.REFRESH_INTERVAL * this.originalStrength*2);
 				//System.out.println("------------------------------");
 			}
 			catch (Exception e) {}

@@ -12,14 +12,18 @@ public class Game extends Observable implements Serializable  {
 	public static final int DIMX = 8;
 	//private static final int NUM_PLAYERS = 90;
 	public static final int NUM_PLAYERS = 6;
+	//RESTORE
 	private static final int NUM_FINISHED_PLAYERS_TO_END_GAME=3;
 
-	public static final long REFRESH_INTERVAL = 400;
+	//RESTORE
+	//public static final long REFRESH_INTERVAL = 400;
+
+	public static final long REFRESH_INTERVAL = 5000;
+
 	public static final double MAX_INITIAL_STRENGTH = 3;
 	public static final double MAX_POSSIBLE_STRENGTH = 10;
 	public static final long MAX_WAITING_TIME_FOR_MOVE = 2000;
-	//public static final long INITIAL_WAITING_TIME = 10000;
-	public static final long INITIAL_WAITING_TIME = 3000;
+	public static final long INITIAL_WAITING_TIME = 8000;
 
 
 	protected Cell[][] board;
@@ -58,7 +62,10 @@ public class Game extends Observable implements Serializable  {
 
 	public Cell getRandomCell() {
 		Cell newCell=getCell(new Coordinate((int)(Math.random()*Game.DIMX),(int)(Math.random()*Game.DIMY)));
-		return newCell; 
+		if (newCell.isOcupied()){
+			System.out.println("___________OCUPADA________");
+		}
+		return newCell;
 	}
 
 	public boolean isWithinBounds(Coordinate coord) {
@@ -80,5 +87,31 @@ public class Game extends Observable implements Serializable  {
 			}
 		}
 		return null;
+	}
+
+	public void printBoard(){
+		for (int y = 0; y < Game.DIMY; y++) {
+			if (y == 0){
+				System.out.print("     "+ y + " ");
+
+			}else System.out.print(" "+ y + " ");
+		}
+		System.out.println("\n---------------------------");
+		for (int y = 0; y < Game.DIMY; y++) {
+			System.out.print(y + " | ");
+			for (int x = 0; x < Game.DIMX; x++) {
+					Player p = this.getCell(new Coordinate(x,y)).getPlayer();
+					if (p != null) {
+						if (p.isHumanPlayer()) {
+							System.out.print(" X ");
+						} else if (!p.isHumanPlayer()) {
+							System.out.print(" B ");
+						}
+					}
+					else System.out.print(" - ");
+				}
+			System.out.println();
+		}
+		System.out.println();
 	}
 }

@@ -38,7 +38,7 @@ public abstract class Player extends Thread implements Serializable {
 		return this.game.getCell(game.searchPlayerInBoard(this));
 	}
 
-	public Player(int id, Game game, byte strength) {
+	public Player(int id, Game game, byte strength) throws InterruptedException {
 		super();
 		this.id = id;
 		this.game = game;
@@ -67,12 +67,7 @@ public abstract class Player extends Thread implements Serializable {
 
 		if (otherPlayer.isDead()) {
 
-			if (isHumanPlayer()) {
-
-				boardJComponent.clearLastPressedDirection();
-			}
-
-			else {
+			if (!isHumanPlayer()) {
 
 				System.err.println("BLOCKED - OTHER PLAYER DEAD " + " Player#"+ this.getIdentification() + " Energia: " + this.currentStrength);
 

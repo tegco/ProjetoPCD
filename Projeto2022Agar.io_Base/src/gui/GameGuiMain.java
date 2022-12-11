@@ -29,9 +29,6 @@ public class GameGuiMain implements Observer {
 	}
 
 	private void buildGui() {
-		
-		boardGui = new BoardJComponent(game, alternativeKeys);
-		frame.add(boardGui);
 
 		//VOLTAR A POR COMO ORIGINALMENTE ESTAVA
 		//frame.setSize(800,800);
@@ -39,17 +36,19 @@ public class GameGuiMain implements Observer {
 		frame.setLocation(300, 100);
 		//frame.setLocation(0, 150);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+		boardGui = new BoardJComponent(game, alternativeKeys);
+		frame.add(boardGui);
 	}
 
-	public void init() throws InterruptedException  {
+	public void init(int connectedPlayers) throws InterruptedException  {
 
 		System.out.println("INITIAL PLACEMENT: \n" + "------------------");
 
 		frame.setVisible(true);
-		
-		for (int i = 0; i < Game.NUM_PLAYERS; i++) {
 
-			player = new AutomaticPlayer (i, game, (byte) Player.generateOriginalStrength());
+		for (int i = 1; i < Game.NUM_PLAYERS; i++) {
+			AutomaticPlayer player = new AutomaticPlayer (i, game, (byte) Player.generateOriginalStrength());
 			player.start();
 		}
 	}
@@ -61,11 +60,14 @@ public class GameGuiMain implements Observer {
 
 	public static void main(String[] args) throws InterruptedException, IOException {
 
-		GameGuiMain game = new GameGuiMain();
-		game.init();
-		
-		MyServer server = new MyServer(game.boardGui);
+		GameGuiMain gameGui = new GameGuiMain();
+
+		MyServer server = new MyServer(gameGui.boardGui);
+		gameGui.init(server.getN_remotePlayers());
 		server.startServing();
-		
+
+		System.out.println("Start");
 	}
+
+
 }

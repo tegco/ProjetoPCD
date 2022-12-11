@@ -12,7 +12,7 @@ public class Cell implements Serializable {
 
 	private Coordinate position;
 	private Game game;
-	private Player player = null;
+	private Player player=null;
 
 	private Lock lock = new ReentrantLock();
 	private Condition cellFree = lock.newCondition();
@@ -27,7 +27,6 @@ public class Cell implements Serializable {
 	public void setPlayer(Player newPlayer) throws InterruptedException {
 
 		lock.lock();
-
 		try {
 
 			if (newPlayer == null) {
@@ -37,12 +36,13 @@ public class Cell implements Serializable {
 
 			while (this.isOcupied()) {
 				//VOLTAR A POR
-				//System.err.println("\nPosition " + this.player.getCurrentCell().getPosition().toString() + " is occupied by Player#" + player.getIdentification() + " and Player#" + newPlayer.getIdentification() + " is waiting!\n");
+				System.err.println("\nPosition " + this.player.getCurrentCell().getPosition().toString() + " is occupied by Player#" + player.getIdentification() + " and Player#" + newPlayer.getIdentification() + " is waiting!\n");
 				
 				cellFree.await();
 			}
 
 			this.player = newPlayer;
+
 
 		} finally {
 			

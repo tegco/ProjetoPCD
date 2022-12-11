@@ -7,36 +7,35 @@ import gui.BoardJComponent;
 
 public class RemotePlayer extends Player {
 
-	private static final byte INITIAL_STRENGTH = 5;
+	private static final byte INITIAL_STRENGHT = 5;
+
 	BoardJComponent boardJComponent;
 
-	public RemotePlayer(int id, Game game) {
-		super(id, game, INITIAL_STRENGTH);
+	public RemotePlayer(int id, Game game) throws InterruptedException {
+		super(id, game, INITIAL_STRENGHT);
 	}
-	
+
 	@Override
 	public void run () {
 
 		try {
 			game.addPlayerToGame(this);
 			//System.out.println("Player#" + this.getIdentification() + " "  + this.getCurrentCell().getPosition().toString() + " Energy = " + this.getCurrentStrength());
-			Thread.sleep(Game.INITIAL_WAITING_TIME);
+			//Thread.sleep(Game.INITIAL_WAITING_TIME);
+			System.out.println("\nNEW PLAYER ON POSITION (" + this.getCurrentCell().getPosition().y + ", " + this.getCurrentCell().getPosition().x+")");
 		} catch (InterruptedException e) {
 			e.printStackTrace();
-		} 
+		}
 	}
-
 	@Override
 	public void move(Direction direction) throws InterruptedException {
 
 		Cell initialCell = this.getCurrentCell();
 		Coordinate initialPos = initialCell.getPosition();
 
-		direction = boardJComponent.getLastPressedDirection();
-
 		Coordinate newPos = initialPos.translate(direction.getVector());
-		Cell newCell;
 
+		Cell newCell;
 
 		if(isValidPosition(newPos)) {
 
@@ -44,19 +43,17 @@ public class RemotePlayer extends Player {
 
 			if (newCell.getPlayer()!= null) {
 				this.movementOutcome(newCell.getPlayer());
-				game.notifyChange();
 			}
 			else {
 				try {
-
 					initialCell.setPlayer(null);
 					newCell.setPlayer(this);
-					game.notifyChange();
 
 				} catch (Exception e) {}
 			}
 			game.notifyChange();
 		}
+		System.out.println("Initial CELL ---> (" + initialPos.y+", "+initialPos.x + ")  ==> (" + newPos.y+", "+newPos.x+")");
 	}
 
 	@Override

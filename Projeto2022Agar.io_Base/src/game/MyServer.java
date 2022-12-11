@@ -18,14 +18,13 @@ public class MyServer {
 	private Game game;
 	private transient BoardJComponent boardGui;
 	private int n_remotePlayers;
+	private RemotePlayer remotePlayer;
 
 	public MyServer(BoardJComponent boardGui) {
 		this.boardGui = boardGui;
 		this.game = boardGui.getGame();
 		this.n_remotePlayers = 0;
 	}
-
-	ExecutorService executorService = Executors.newFixedThreadPool(90);
 
 	public void startServing() throws IOException, InterruptedException {
 		ServerSocket serverSocket = new ServerSocket(PORT);
@@ -40,7 +39,7 @@ public class MyServer {
 				Socket socket = serverSocket.accept();
 				System.out.println("Processing request");
 
-				executorService.submit(new DealWithClient(socket));
+				new DealWithClient(socket).start();
 			}			
 		} finally {
 
@@ -57,20 +56,18 @@ public class MyServer {
 		private BufferedReader in;
 		private ObjectOutputStream out;
 
-		private RemotePlayer remotePlayer;
-
 		public DealWithClient(Socket socket) throws IOException, InterruptedException {
 			doConnections(socket);
+			System.out.println("\nServer ESTADO Inicial");
+			game.printBoard();
+			addRemotePlayer();
 		}
 
 		@Override
 		public void run() {
 
 			try {
-
 				sendGameState();
-				getDirection();
-
 			} catch (IOException e) {
 
 				System.out.println("Error accepting connection");
@@ -80,44 +77,45 @@ public class MyServer {
 			}
 		}
 
-
 		void doConnections(Socket socket) throws IOException, InterruptedException {
-
 			in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
 			out = new ObjectOutputStream(socket.getOutputStream());
 			System.out.println("SERVER --> connection established");
-
-			addRemotePlayer();
 		}
 
 		private void addRemotePlayer() throws InterruptedException {
 			remotePlayer = new RemotePlayer(n_remotePlayers, game);
-			game.addPlayerToGame(remotePlayer);
+			remotePlayer.start();
 			n_remotePlayers++;
 		}
 
-		private void sendGameState() throws IOException {
-
-			//for (int i = 0; i < 90; i++) {
-			System.out.println("ENVIEI O Board_Gui");
-
+		private void sendGameState() throws IOException, InterruptedException {
 			out.writeObject(boardGui);
-
-			try {
-				Thread.sleep(Game.REFRESH_INTERVAL);
-
-			} catch (InterruptedException e) {}
+			System.out.println("\nServer ENVIOU este game");
+			game.printBoard();
+			getDirection();
 		}
-		//out.println("FIM");
-		//}
 
 		private void getDirection() throws IOException, InterruptedException {
+			Direction direction;
+			while (true) {
+				direction = Direction.valueOf(in.readLine());
 
-			String direction = in.readLine();
-			System.out.println("DIRECAO_CLIENT: " + direction);
-			remotePlayer.move(Direction.UP);
+				if (direction!= null) {
+					System.out.println("DIRECAO_CLIENT: " + direction);
+					System.out.println("\nServer RECEBEU este game");
+					game.printBoard();
+					
+					if(remotePlayer.getCurrentCell() != null) {
+						remotePlayer.move(direction);
+					}
 
+					boardGui.clearLastPressedDirection();
+					break;
+				}
+			}
+			sendGameState();
 		}
 	}
 }
