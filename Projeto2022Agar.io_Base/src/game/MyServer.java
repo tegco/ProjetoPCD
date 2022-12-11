@@ -91,6 +91,7 @@ public class MyServer {
 		}
 
 		private void sendGameState() throws IOException, InterruptedException {
+			out.reset();
 			out.writeObject(boardGui);
 			System.out.println("\nServer ENVIOU este game");
 			game.printBoard();

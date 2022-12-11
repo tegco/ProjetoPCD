@@ -112,13 +112,10 @@ public class Client {
 				direction = Direction.randomDirectionGenerator();
 				//direction = boardGui.getLastPressedDirection();
 				if (direction != null) {
-					System.out.println("HumanPlayer:" + direction);
-					out.println(direction.name());
-					System.out.println("\nCliente ENVIOU este game");
-					game.printBoard();
+					out.println(direction.name());	
 					try {
 						System.out.println("I Sleep!!!!!!");
-						System.out.println("MANDOU DIR. --> " + direction);
+						System.out.println("\nCliente ENVIOU DIR. --> " + direction);
 						Thread.sleep(Game.REFRESH_INTERVAL);
 						getGameState();
 					} catch (InterruptedException e) {
@@ -126,20 +123,7 @@ public class Client {
 					}
 				}
 			}
-			/**Direction direction ;
-
-			while (true) {
-				direction = boardGui.getLastPressedDirection();
-
-				if (direction != null) {
-					break;
-				}
-			}
-			System.out.println("HumanPlayer:" + direction);
-
-			out.println(direction.name());
-			//boardGui.clearLastPressedDirection();
-			**/
+			
 		}
 	}
 
