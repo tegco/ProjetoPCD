@@ -20,6 +20,8 @@ public class MyServer {
 	private int n_remotePlayers;
 	private RemotePlayer remotePlayer;
 
+	public Player[] threads = Game.threads_humanas;
+	
 	public MyServer(BoardJComponent boardGui) {
 		this.boardGui = boardGui;
 		this.game = boardGui.getGame();
@@ -85,7 +87,8 @@ public class MyServer {
 		}
 
 		private void addRemotePlayer() throws InterruptedException {
-			remotePlayer = new RemotePlayer(n_remotePlayers, game);
+			remotePlayer = new RemotePlayer(n_remotePlayers, game,game.barrier);
+			threads[1]= remotePlayer;
 			remotePlayer.start();
 			n_remotePlayers++;
 		}
@@ -100,7 +103,7 @@ public class MyServer {
 
 		private void getDirection() throws IOException, InterruptedException {
 			Direction direction;
-			while (true) {
+			while (!remotePlayer.stop) {
 				direction = Direction.valueOf(in.readLine());
 
 				if (direction!= null) {

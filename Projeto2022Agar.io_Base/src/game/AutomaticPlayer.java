@@ -5,11 +5,12 @@ import environment.Coordinate;
 import environment.Direction;
 
 import java.io.Serializable;
+import java.util.concurrent.CyclicBarrier;
 
 public class AutomaticPlayer extends Player implements Serializable {
 
-	public AutomaticPlayer(int id, Game game, byte strength) throws InterruptedException {
-		super(id, game, strength);
+	public AutomaticPlayer(int id, Game game, byte strength, CyclicBarrier barrier) throws InterruptedException {
+		super(id, game, strength, barrier);
 	}
 
 	@Override
@@ -33,7 +34,7 @@ public class AutomaticPlayer extends Player implements Serializable {
 			try {
 				//System.out.println("-> Player#" + this.getIdentification() + " " + "Energy = " + this.getCurrentStrength());
 				this.move(Direction.randomDirectionGenerator());
-				Thread.sleep(Game.REFRESH_INTERVAL * this.originalStrength*2);
+				Thread.sleep(Game.REFRESH_INTERVAL * this.originalStrength);
 				//System.out.println("------------------------------");
 			}
 			catch (Exception e) {}

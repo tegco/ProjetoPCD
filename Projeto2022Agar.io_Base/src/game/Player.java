@@ -38,12 +38,21 @@ public abstract class Player extends Thread implements Serializable {
 		return this.game.getCell(game.searchPlayerInBoard(this));
 	}
 
-	public Player(int id, Game game, byte strength) throws InterruptedException {
+//	public Player(int id, Game game, byte strength, CyclicBarrier barrier) throws InterruptedException {
+//		super();
+//		this.id = id;
+//		this.game = game;
+//		currentStrength = strength;
+//		originalStrength = strength; //ver
+//		this.barrier = barrier;
+//	}
+	public Player(int id, Game game, byte strength, CyclicBarrier barrier) throws InterruptedException {
 		super();
 		this.id = id;
 		this.game = game;
 		currentStrength = strength;
 		originalStrength = strength; //ver
+		this.barrier = barrier;
 	}
 
 	// Generate a player's initial strength randomly, from 1 to 3 (inclusive)
@@ -132,31 +141,14 @@ public abstract class Player extends Thread implements Serializable {
 			winner.getState().toString();
 			//winner.stop = true;
 
-			barrier =  new CyclicBarrier(3); new Runnable() {
-
-				//System.out.println("Estou aqui");
-
-				//@Override
-				public void run() {
-
-					System.out.println("Estou aqui");
-
-					try {
-
-						System.out.println("Thread " + currentThread().getName() + "is calling await");
-
-						barrier.await();
-
-						System.out.println("Thread " + currentThread().getName() + "started running again");
-
-					} catch (InterruptedException | BrokenBarrierException e) {
-
-						e.printStackTrace();
-					}
-
-				}
-
-			};
+			try {
+				barrier.await();
+				System.err.println("Thread finishing at:"+System.currentTimeMillis());
+			} catch (InterruptedException | 
+					BrokenBarrierException e) {
+			}
+			
+			
 		}
 
 	}

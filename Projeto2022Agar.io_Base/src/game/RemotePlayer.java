@@ -1,5 +1,7 @@
 package game;
 
+import java.util.concurrent.CyclicBarrier;
+
 import environment.Cell;
 import environment.Coordinate;
 import environment.Direction;
@@ -11,8 +13,8 @@ public class RemotePlayer extends Player {
 
 	BoardJComponent boardJComponent;
 
-	public RemotePlayer(int id, Game game) throws InterruptedException {
-		super(id, game, INITIAL_STRENGHT);
+	public RemotePlayer(int id, Game game, CyclicBarrier barrier) throws InterruptedException {
+		super(id, game, INITIAL_STRENGHT,barrier);
 	}
 
 	@Override

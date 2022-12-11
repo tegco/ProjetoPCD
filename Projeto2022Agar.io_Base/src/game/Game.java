@@ -3,28 +3,54 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
+import java.util.concurrent.CyclicBarrier;
+
 import environment.Cell;
 import environment.Coordinate;
 
 public class Game extends Observable implements Serializable  {
 
-	public static final int DIMY = 8;
-	public static final int DIMX = 8;
+	public static final int DIMY = 12;
+	public static final int DIMX = 12;
 	//private static final int NUM_PLAYERS = 90;
-	public static final int NUM_PLAYERS = 6;
+	public static final int NUM_PLAYERS = 30;
+	public static final int NUM_HUMANS = 2;
 	//RESTORE
 	private static final int NUM_FINISHED_PLAYERS_TO_END_GAME=3;
 
 	//RESTORE
 	//public static final long REFRESH_INTERVAL = 400;
 
-	public static final long REFRESH_INTERVAL = 5000;
+	public static final long REFRESH_INTERVAL = 400;
 
 	public static final double MAX_INITIAL_STRENGTH = 3;
 	public static final double MAX_POSSIBLE_STRENGTH = 10;
 	public static final long MAX_WAITING_TIME_FOR_MOVE = 2000;
 	public static final long INITIAL_WAITING_TIME = 8000;
 
+	public static Player[] threads = new Player[NUM_PLAYERS];
+	public static Player[] threads_humanas = new Player[NUM_HUMANS];
+	public static CyclicBarrier barrier =  new CyclicBarrier(NUM_FINISHED_PLAYERS_TO_END_GAME,new Runnable() {
+
+		//System.out.println("Estou aqui");
+
+		//@Override
+		public void run() {
+
+			System.out.println("YOOOOO");
+			for (int i = 1; i < Game.NUM_PLAYERS; i++) {
+				threads[i].stop=true;
+				
+			}
+			
+				threads_humanas[1].stop=true;
+				
+			
+			System.out.println("GAME OVER");
+
+		}
+
+	});
 
 	protected Cell[][] board;
 

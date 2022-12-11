@@ -18,6 +18,8 @@ public class GameGuiMain implements Observer {
 	private Game game;
 	public Player player;
 	private final boolean alternativeKeys;
+	
+	public Player[] threads = Game.threads;
 
 	public GameGuiMain() {
 		super();
@@ -48,7 +50,8 @@ public class GameGuiMain implements Observer {
 		frame.setVisible(true);
 
 		for (int i = 1; i < Game.NUM_PLAYERS; i++) {
-			AutomaticPlayer player = new AutomaticPlayer (i, game, (byte) Player.generateOriginalStrength());
+			player = new AutomaticPlayer (i, game, (byte) Player.generateOriginalStrength(),Game.barrier);
+			threads[i] = player;
 			player.start();
 		}
 	}
