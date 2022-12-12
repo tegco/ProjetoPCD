@@ -115,7 +115,6 @@ public abstract class Player extends Thread implements Serializable {
 
 		if (winner.hasMaxStrenght()) {
 			winner.getState().toString();
-			//winner.stop = true;
 
 			try {
 				barrier.await();

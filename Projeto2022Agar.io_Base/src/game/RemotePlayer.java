@@ -27,7 +27,7 @@ public class RemotePlayer extends Player {
 			e.printStackTrace();
 		}
 		
-		while (!stop) {
+		while (true) {
 
 			try {
 				
