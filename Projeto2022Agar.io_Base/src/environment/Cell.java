@@ -41,6 +41,8 @@ public class Cell implements Serializable {
 				if(this.player.isDead()) {
 					
 					newPlayer.resolveBlockedMovement();
+					Cell initialPos= game.getRandomCell();
+					initialPos.setPlayer(newPlayer);
 				}
 				
 				cellFree.await();

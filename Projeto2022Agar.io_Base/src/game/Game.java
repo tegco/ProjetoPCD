@@ -10,10 +10,10 @@ import environment.Coordinate;
 
 public class Game extends Observable implements Serializable  {
 
-	public static final int DIMY = 12;
-	public static final int DIMX = 12;
-	//private static final int NUM_PLAYERS = 90;
-	public static final int NUM_PLAYERS = 6;
+	public static final int DIMY = 15;
+	public static final int DIMX = 15;
+	public static final int NUM_PLAYERS = 30;
+	//public static final int NUM_PLAYERS = 20;
 	public static final int NUM_HUMANS = 2;
 	//RESTORE
 	private static final int NUM_FINISHED_PLAYERS_TO_END_GAME=3;
@@ -26,7 +26,7 @@ public class Game extends Observable implements Serializable  {
 	public static final double MAX_INITIAL_STRENGTH = 3;
 	public static final double MAX_POSSIBLE_STRENGTH = 10;
 	public static final long MAX_WAITING_TIME_FOR_MOVE = 2000;
-	public static final long INITIAL_WAITING_TIME = 8000;
+	public static final long INITIAL_WAITING_TIME = 10000;
 
 	public static Player[] threads = new Player[NUM_PLAYERS];
 	public static Player[] threads_humanas = new Player[NUM_HUMANS];
@@ -37,7 +37,7 @@ public class Game extends Observable implements Serializable  {
 		//@Override
 		public void run() {
 
-			System.out.println("YOOOOO");
+			
 			for (int i = 1; i < Game.NUM_PLAYERS; i++) {
 				threads[i].stop=true;
 				
@@ -47,9 +47,7 @@ public class Game extends Observable implements Serializable  {
 				
 			
 			System.out.println("GAME OVER");
-
 		}
-
 	});
 
 	protected Cell[][] board;

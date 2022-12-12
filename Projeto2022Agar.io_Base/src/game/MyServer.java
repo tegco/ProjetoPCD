@@ -16,12 +16,12 @@ public class MyServer {
 
 	public static final int PORT = 8080;
 	private Game game;
-	private transient BoardJComponent boardGui;
+	private BoardJComponent boardGui;
 	private int n_remotePlayers;
 	private RemotePlayer remotePlayer;
 
 	public Player[] threads = Game.threads_humanas;
-	
+
 	public MyServer(BoardJComponent boardGui) {
 		this.boardGui = boardGui;
 		this.game = boardGui.getGame();
@@ -42,6 +42,7 @@ public class MyServer {
 				System.out.println("Processing request");
 
 				new DealWithClient(socket).start();
+
 			}			
 		} finally {
 
@@ -68,15 +69,27 @@ public class MyServer {
 		@Override
 		public void run() {
 
-			try {
-				sendGameState();
-			} catch (IOException e) {
+			new Thread() {
+				@Override
+				public void run() {
 
-				System.out.println("Error accepting connection");
-				e.printStackTrace();
-			} catch (InterruptedException e) {
-				throw new RuntimeException(e);
-			}
+
+					try {
+						getDirection();
+					} catch (IOException | InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
+				}}.start();
+
+				try {
+					sendGameState();
+				} catch (IOException | InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
 		}
 
 		void doConnections(Socket socket) throws IOException, InterruptedException {
@@ -94,39 +107,40 @@ public class MyServer {
 		}
 
 		private void sendGameState() throws IOException, InterruptedException {
-			out.reset();
-			try {
-			Thread.sleep(Game.REFRESH_INTERVAL);
-			} catch (InterruptedException e) {
+			while(true) {
 				
-									}
-			out.writeObject(boardGui);
-			
-			System.out.println("\nServer ENVIOU este game");
-			game.printBoard();
-			getDirection();
+				Thread.sleep(Game.REFRESH_INTERVAL);
+
+				out.writeObject(game);
+
+				System.out.println("\nServer ENVIOU este game");
+				game.printBoard();
+				//getDirection();~
+				out.reset();
+			}
 		}
 
 		private void getDirection() throws IOException, InterruptedException {
 			Direction direction;
 			while (!remotePlayer.stop) {
-				direction = Direction.valueOf(in.readLine());
+				String dir = in.readLine();
+				if(dir!=null) {
+					direction = Direction.valueOf(dir);
 
-				if (direction!= null) {
 					System.out.println("DIRECAO_CLIENT: " + direction);
 					System.out.println("\nServer RECEBEU este game");
 					game.printBoard();
-					
+
 					if(remotePlayer.getCurrentCell() != null) {
-						remotePlayer.move(direction);
-						//Thread.sleep(Game.REFRESH_INTERVAL);
+						remotePlayer.setDirection(direction);
+											
 					}
 
-					
-					break;
 				}
+
+
+
 			}
-			sendGameState();
 		}
 	}
 }

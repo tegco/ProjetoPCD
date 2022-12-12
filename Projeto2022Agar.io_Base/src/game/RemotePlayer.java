@@ -10,7 +10,7 @@ import gui.BoardJComponent;
 public class RemotePlayer extends Player {
 
 	private static final byte INITIAL_STRENGHT = 5;
-
+	Direction d;
 	BoardJComponent boardJComponent;
 
 	public RemotePlayer(int id, Game game, CyclicBarrier barrier) throws InterruptedException {
@@ -29,6 +29,25 @@ public class RemotePlayer extends Player {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+		while (!stop) {
+
+			try {
+				//System.out.println("-> Player#" + this.getIdentification() + " " + "Energy = " + this.getCurrentStrength());
+				if(d!=null) {
+					this.move(d);
+					d=null;
+				}
+				
+				Thread.sleep(Game.REFRESH_INTERVAL);
+				//System.out.println("------------------------------");
+			}
+			catch (Exception e) {}
+
+			if (!this.isActive()) {
+				break;
+			}
+		}
+		
 	}
 	@Override
 	public void move(Direction direction) throws InterruptedException {
@@ -62,6 +81,10 @@ public class RemotePlayer extends Player {
 	@Override
 	public boolean isHumanPlayer() {
 		return true;
+	}
+	
+	public void setDirection(Direction d) {
+		this.d = d;
 	}
 
 }

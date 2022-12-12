@@ -13,9 +13,9 @@ import javax.swing.JFrame;
 
 public class GameGuiMain implements Observer {
 
-	private JFrame frame = new JFrame("pcd.io");
-	private BoardJComponent boardGui;
-	private Game game;
+	protected JFrame frame = new JFrame("pcd.io");
+	protected BoardJComponent boardGui;
+	protected Game game;
 	public Player player;
 	private final boolean alternativeKeys;
 	
@@ -42,8 +42,8 @@ public class GameGuiMain implements Observer {
 		boardGui = new BoardJComponent(game, alternativeKeys);
 		frame.add(boardGui);
 	}
-
-	public void init(int connectedPlayers) throws InterruptedException  {
+	
+	public void init() throws InterruptedException  {
 
 		System.out.println("INITIAL PLACEMENT: \n" + "------------------");
 
@@ -66,7 +66,8 @@ public class GameGuiMain implements Observer {
 		GameGuiMain gameGui = new GameGuiMain();
 
 		MyServer server = new MyServer(gameGui.boardGui);
-		gameGui.init(server.getN_remotePlayers());
+		gameGui.init();
+		//server.getN_remotePlayers()
 		server.startServing();
 
 		System.out.println("Start");

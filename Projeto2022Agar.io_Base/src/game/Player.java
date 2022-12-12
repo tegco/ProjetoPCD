@@ -68,7 +68,11 @@ public abstract class Player extends Thread implements Serializable {
 		if (otherPlayer.isActive()) {
 
 			setAfterConfrontationStrength(this, otherPlayer);
-			System.err.println("Player#" + this.getIdentification() + " e Player#" + otherPlayer.getIdentification()  + " confrontation!!!" );
+			//System.err.println("Player#" + this.getIdentification() + " e Player#" + otherPlayer.getIdentification()  + " confrontation!!!" );
+			
+			
+			
+			
 			//this.getCurrentCell().setPlayer(this);
 			//otherPlayer.getCurrentCell().setPlayer(otherPlayer);
 		}
@@ -85,7 +89,7 @@ public abstract class Player extends Thread implements Serializable {
 	
 	public void resolveBlockedMovement() throws InterruptedException {
 		
-		System.err.println("BLOCKED - OTHER PLAYER DEAD " + " Player#"+ this.getIdentification() + " Energia: " + this.currentStrength);
+		//System.err.println("BLOCKED - OTHER PLAYER DEAD " + " Player#"+ this.getIdentification() + " Energia: " + this.currentStrength);
 		
 		ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
 
@@ -93,7 +97,7 @@ public abstract class Player extends Thread implements Serializable {
 
 			this.interrupt();
 
-			System.out.println("Player#" + this.getIdentification() + " Energia: " + this.currentStrength +  " ESTOU A MEXER");
+			//System.out.println("Player#" + this.getIdentification() + " Energia: " + this.currentStrength +  " ESTOU A MEXER");
 
 		}, 5, TimeUnit.SECONDS);
 
