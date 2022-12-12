@@ -7,7 +7,6 @@ import game.AutomaticPlayer;
 import game.Game;
 import game.MyServer;
 import game.Player;
-//import game.SearcherThread;
 
 import javax.swing.JFrame;
 
@@ -32,11 +31,8 @@ public class GameGuiMain implements Observer {
 
 	private void buildGui() {
 
-		//VOLTAR A POR COMO ORIGINALMENTE ESTAVA
-		//frame.setSize(800,800);
-		frame.setSize(400, 400);
-		frame.setLocation(300, 100);
-		//frame.setLocation(0, 150);
+		frame.setSize(600, 600);
+		frame.setLocation(150, 100);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		boardGui = new BoardJComponent(game, alternativeKeys);
@@ -44,8 +40,6 @@ public class GameGuiMain implements Observer {
 	}
 	
 	public void init() throws InterruptedException  {
-
-		System.out.println("INITIAL PLACEMENT: \n" + "------------------");
 
 		frame.setVisible(true);
 
@@ -67,11 +61,6 @@ public class GameGuiMain implements Observer {
 
 		MyServer server = new MyServer(gameGui.boardGui);
 		gameGui.init();
-		//server.getN_remotePlayers()
 		server.startServing();
-
-		System.out.println("Start");
 	}
-
-
 }

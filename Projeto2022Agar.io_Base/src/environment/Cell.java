@@ -35,28 +35,27 @@ public class Cell implements Serializable {
 			}
 
 			while (this.isOcupied()) {
-				//VOLTAR A POR
+
 				System.err.println("\nPosition " + this.player.getCurrentCell().getPosition().toString() + " is occupied by Player#" + player.getIdentification() + " and Player#" + newPlayer.getIdentification() + " is waiting!\n");
-				
-				if(this.player.isDead()) {
-					
+
+				if (this.player.isDead()) {
+
 					newPlayer.resolveBlockedMovement();
 					Cell initialPos= game.getRandomCell();
 					initialPos.setPlayer(newPlayer);
 				}
-				
+
 				cellFree.await();
 			}
 
 			this.player = newPlayer;
 
-
 		} finally {
-			
+
 			lock.unlock();
 		}
 	}
-	
+
 
 	public Coordinate getPosition() {
 		return position;
@@ -65,7 +64,6 @@ public class Cell implements Serializable {
 	public boolean isOcupied() {
 		return player != null;
 	}
-
 
 	public Player getPlayer() {
 		return player;

@@ -10,11 +10,10 @@ import gui.BoardJComponent;
 public class RemotePlayer extends Player {
 
 	private static final byte INITIAL_STRENGHT = 5;
-	Direction d;
-	BoardJComponent boardJComponent;
+	private Direction direction;
 
 	public RemotePlayer(int id, Game game, CyclicBarrier barrier) throws InterruptedException {
-		super(id, game, INITIAL_STRENGHT,barrier);
+		super(id, game, INITIAL_STRENGHT, barrier);
 	}
 
 	@Override
@@ -22,24 +21,23 @@ public class RemotePlayer extends Player {
 
 		try {
 			game.addPlayerToGame(this);
-			//System.out.println("Player#" + this.getIdentification() + " "  + this.getCurrentCell().getPosition().toString() + " Energy = " + this.getCurrentStrength());
 			Thread.sleep(Game.INITIAL_WAITING_TIME);
 			
-			System.out.println("\nNEW PLAYER ON POSITION (" + this.getCurrentCell().getPosition().y + ", " + this.getCurrentCell().getPosition().x+")");
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+		
 		while (!stop) {
 
 			try {
-				//System.out.println("-> Player#" + this.getIdentification() + " " + "Energy = " + this.getCurrentStrength());
-				if(d!=null) {
-					this.move(d);
-					d=null;
-				}
 				
+				if(direction!=null) {
+					
+					this.move(direction);
+					direction = null;
+				}
+
 				Thread.sleep(Game.REFRESH_INTERVAL);
-				//System.out.println("------------------------------");
 			}
 			catch (Exception e) {}
 
@@ -47,8 +45,8 @@ public class RemotePlayer extends Player {
 				break;
 			}
 		}
-		
 	}
+	
 	@Override
 	public void move(Direction direction) throws InterruptedException {
 
@@ -75,16 +73,14 @@ public class RemotePlayer extends Player {
 			}
 			game.notifyChange();
 		}
-		System.out.println("Initial CELL ---> (" + initialPos.y+", "+initialPos.x + ")  ==> (" + newPos.y+", "+newPos.x+")");
 	}
 
 	@Override
 	public boolean isHumanPlayer() {
 		return true;
 	}
-	
-	public void setDirection(Direction d) {
-		this.d = d;
-	}
 
+	public void setDirection(Direction direction) {
+		this.direction = direction;
+	}
 }

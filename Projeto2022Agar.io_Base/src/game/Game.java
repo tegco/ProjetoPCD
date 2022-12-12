@@ -1,7 +1,5 @@
 package game;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Observable;
 import java.util.concurrent.CyclicBarrier;
 
@@ -10,43 +8,28 @@ import environment.Coordinate;
 
 public class Game extends Observable implements Serializable  {
 
-	public static final int DIMY = 15;
-	public static final int DIMX = 15;
-	public static final int NUM_PLAYERS = 30;
-	//public static final int NUM_PLAYERS = 20;
+	public static final int DIMY = 30;
+	public static final int DIMX = 30;
+	public static final int NUM_PLAYERS = 89;
 	public static final int NUM_HUMANS = 2;
-	//RESTORE
 	private static final int NUM_FINISHED_PLAYERS_TO_END_GAME=3;
-
-	//RESTORE
-	//public static final long REFRESH_INTERVAL = 400;
-
 	public static final long REFRESH_INTERVAL = 400;
 
-	public static final double MAX_INITIAL_STRENGTH = 3;
-	public static final double MAX_POSSIBLE_STRENGTH = 10;
-	public static final long MAX_WAITING_TIME_FOR_MOVE = 2000;
+	public static final int MAX_INITIAL_STRENGTH = 3;
+	public static final int MAX_POSSIBLE_STRENGTH = 10;
 	public static final long INITIAL_WAITING_TIME = 10000;
 
 	public static Player[] threads = new Player[NUM_PLAYERS];
 	public static Player[] threads_humanas = new Player[NUM_HUMANS];
 	public static CyclicBarrier barrier =  new CyclicBarrier(NUM_FINISHED_PLAYERS_TO_END_GAME,new Runnable() {
 
-		//System.out.println("Estou aqui");
-
 		//@Override
 		public void run() {
 
-			
 			for (int i = 1; i < Game.NUM_PLAYERS; i++) {
 				threads[i].stop=true;
-				
 			}
-			
-				threads_humanas[1].stop=true;
-				
-			
-			System.out.println("GAME OVER");
+			threads_humanas[1].stop=true;
 		}
 	});
 
@@ -66,10 +49,8 @@ public class Game extends Observable implements Serializable  {
 	public void addPlayerToGame(Player player) throws InterruptedException {
 		Cell initialPos=getRandomCell();
 		initialPos.setPlayer(player);
-
 		// To update GUI
 		notifyChange();
-
 	}
 
 	public Cell getCell(Coordinate at) {
@@ -85,9 +66,10 @@ public class Game extends Observable implements Serializable  {
 	}
 
 	public Cell getRandomCell() {
+		
 		Cell newCell=getCell(new Coordinate((int)(Math.random()*Game.DIMX),(int)(Math.random()*Game.DIMY)));
+		
 		if (newCell.isOcupied()){
-			System.out.println("___________OCUPADA________");
 		}
 		return newCell;
 	}
@@ -101,7 +83,7 @@ public class Game extends Observable implements Serializable  {
 	public Coordinate searchPlayerInBoard (Player player) {
 
 		for (int x = 0; x < Game.DIMX; x++) {
-			
+
 			for (int y = 0; y < Game.DIMY; y++) {
 				Coordinate coord = new Coordinate (x, y); 
 
@@ -114,6 +96,7 @@ public class Game extends Observable implements Serializable  {
 	}
 
 	public void printBoard(){
+		
 		for (int y = 0; y < Game.DIMY; y++) {
 			if (y == 0){
 				System.out.print("     "+ y + " ");
@@ -124,16 +107,16 @@ public class Game extends Observable implements Serializable  {
 		for (int y = 0; y < Game.DIMY; y++) {
 			System.out.print(y + " | ");
 			for (int x = 0; x < Game.DIMX; x++) {
-					Player p = this.getCell(new Coordinate(x,y)).getPlayer();
-					if (p != null) {
-						if (p.isHumanPlayer()) {
-							System.out.print(" X ");
-						} else if (!p.isHumanPlayer()) {
-							System.out.print(" B ");
-						}
+				Player p = this.getCell(new Coordinate(x,y)).getPlayer();
+				if (p != null) {
+					if (p.isHumanPlayer()) {
+						System.out.print(" X ");
+					} else if (!p.isHumanPlayer()) {
+						System.out.print(" B ");
 					}
-					else System.out.print(" - ");
 				}
+				else System.out.print(" - ");
+			}
 			System.out.println();
 		}
 		System.out.println();

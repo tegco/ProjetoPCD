@@ -4,7 +4,6 @@ import environment.Coordinate;
 import environment.Direction;
 import game.Game;
 import game.Player;
-//import sun.awt.ExtendedKeyCodes;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -153,9 +152,7 @@ public class BoardJComponent extends JComponent implements KeyListener {
 	public Game getGame() {
 		return game;
 	}
-	public void setGame(Game g) {
-		this.game=g;
+	public void setGame(Game game) {
+		this.game = game;
 	}
-	
 }
-

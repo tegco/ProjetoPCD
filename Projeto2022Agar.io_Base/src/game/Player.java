@@ -1,14 +1,10 @@
 package game;
 import java.awt.event.KeyEvent;
 import java.io.Serializable;
-import java.net.InetAddress;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
@@ -25,84 +21,58 @@ import gui.BoardJComponent;
 public abstract class Player extends Thread implements Serializable {
 
 	protected Game game;
-	BoardJComponent boardJComponent;
 	int id;
 	private byte currentStrength;
 	protected byte originalStrength;
 	public boolean stop = false;
 
 	static CyclicBarrier barrier;
-	//static Player[] threads = new Player[3];
 
 	public Cell getCurrentCell() {
 		return this.game.getCell(game.searchPlayerInBoard(this));
 	}
 
-//	public Player(int id, Game game, byte strength, CyclicBarrier barrier) throws InterruptedException {
-//		super();
-//		this.id = id;
-//		this.game = game;
-//		currentStrength = strength;
-//		originalStrength = strength; //ver
-//		this.barrier = barrier;
-//	}
 	public Player(int id, Game game, byte strength, CyclicBarrier barrier) throws InterruptedException {
 		super();
 		this.id = id;
 		this.game = game;
 		currentStrength = strength;
-		originalStrength = strength; //ver
+		originalStrength = strength;
 		this.barrier = barrier;
 	}
 
 	// Generate a player's initial strength randomly, from 1 to 3 (inclusive)
 	public static int generateOriginalStrength() {
+
 		Random random = new Random();
-		int originalStrength = random.nextInt(3 - 1 + 1) + 1;
-		//System.out.println("Energy:" + originalStrength);
+		int originalStrength = random.nextInt(Game.MAX_INITIAL_STRENGTH - 1 + 1) + 1;
 		return originalStrength;
 	}
 
 	public void movementOutcome(Player otherPlayer) throws InterruptedException {
 
 		if (otherPlayer.isActive()) {
-
 			setAfterConfrontationStrength(this, otherPlayer);
-			//System.err.println("Player#" + this.getIdentification() + " e Player#" + otherPlayer.getIdentification()  + " confrontation!!!" );
-			
-			
-			
-			
-			//this.getCurrentCell().setPlayer(this);
-			//otherPlayer.getCurrentCell().setPlayer(otherPlayer);
 		}
-
 
 		if (otherPlayer.isDead()) {
 
 			if (!isHumanPlayer()) {
 				resolveBlockedMovement();
-				
 			}
 		}
 	}
-	
+
 	public void resolveBlockedMovement() throws InterruptedException {
-		
-		//System.err.println("BLOCKED - OTHER PLAYER DEAD " + " Player#"+ this.getIdentification() + " Energia: " + this.currentStrength);
-		
+
 		ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
 
 		executorService.schedule(() -> {
-
 			this.interrupt();
-
-			//System.out.println("Player#" + this.getIdentification() + " Energia: " + this.currentStrength +  " ESTOU A MEXER");
-
-		}, 5, TimeUnit.SECONDS);
+		}, 2, TimeUnit.SECONDS);
 
 		this.wait();
-		
+
 	}
 
 	public static Player confrontationWinner(Player p1, Player p2) {
@@ -127,7 +97,6 @@ public abstract class Player extends Thread implements Serializable {
 	public static void setAfterConfrontationStrength (Player p1, Player p2) {
 
 		Player winner = confrontationWinner(p1, p2);
-		//System.out.println("Winner is Player#" + winner.getIdentification());
 
 		int s = p1.currentStrength += p2.currentStrength;
 
@@ -139,31 +108,22 @@ public abstract class Player extends Thread implements Serializable {
 			p1.currentStrength = (byte) s;
 			p2.currentStrength = 0;
 		}
-
-
 		else {
 			p2.currentStrength = (byte) s;
 			p1.currentStrength = 0;
 		}
 
 		if (winner.hasMaxStrenght()) {
-			System.out.println("Player#" + winner.getIdentification() + " ATINGOU PONTUAÇÃO MÁXIMA");
 			winner.getState().toString();
 			//winner.stop = true;
 
 			try {
 				barrier.await();
-				System.err.println("Thread finishing at:"+System.currentTimeMillis());
-			} catch (InterruptedException | 
-					BrokenBarrierException e) {
+			} catch (InterruptedException | BrokenBarrierException e) {
 			}
-			
-			
 		}
-
 	}
 
-	//System.out.println("Player#" + p1.getIdentification() + ": " + p1.currentStrength + "; " + "Player#" + p2.getIdentification() + ": " + p2.currentStrength);
 
 	public boolean isValidPosition (Coordinate newCoord) {
 		if (game.isWithinBounds(newCoord)) {
@@ -173,10 +133,6 @@ public abstract class Player extends Thread implements Serializable {
 	}
 
 	public abstract void move(Direction direction) throws InterruptedException;
-
-	public void move(KeyEvent keyPressed) throws InterruptedException {
-
-	}
 
 	public abstract boolean isHumanPlayer();
 
